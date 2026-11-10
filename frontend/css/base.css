@@ -1,0 +1,46 @@
+/* =========================================================
+   BẢNG MÀU CHUẨN ĐÃ CHỐT: XÁM THAN CHÌ & XANH NGỌC MINT
+   ========================================================= */
+:root {
+  --bg-body: #f3f5f8;
+  --bg-card: #ffffff;
+  
+  /* Sidebar xám than chì */
+  --sidebar-bg: #23272f;
+  --sidebar-hover: #2e3440;
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #ffffff;
+  
+  /* Điểm nhấn xanh ngọc mint */
+  --primary: #14b8a6;
+  --primary-hover: #0d9488;
+  --primary-light: #ccfbf1;
+  
+  /* Chữ & viền */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  
+  /* Trạng thái */
+  --danger: #ef4444;
+  --danger-bg: #fef2f2;
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  min-height: 100vh;
+}

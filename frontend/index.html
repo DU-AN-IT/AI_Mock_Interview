@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Mock Interview</title>
+  
+  <!-- CSS chia theo từng module chức năng -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+  <!-- ================= TASK 1: KHUNG LAYOUT ================= -->
+  <div class="layout-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">AI</div>
+        <div class="brand-text">
+          <h2>MockInterview</h2>
+          <span>PTIT PROJECT</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="javascript:void(0)" class="menu-item active" data-menu="auth">
+          <span>🔐</span>
+          <span>Tài khoản & Xác thực</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-menu="positions">
+          <span>🎯</span>
+          <span>Vị trí & Cấp độ</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-menu="interview">
+          <span>💬</span>
+          <span>Phòng phỏng vấn</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-menu="history">
+          <span>📊</span>
+          <span>Lịch sử & Kết quả</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <span class="user-status-dot"></span>
+          <span>Chưa đăng nhập</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="page-header-title">Xác thực hệ thống</h1>
+          <p id="page-header-sub">Sprint 2 – Ngày 8 | AI Mock Interview</p>
+        </div>
+        <div class="topbar-badge">
+          <span class="badge-tag">Frontend Pure JS</span>
+        </div>
+      </header>
+
+      <!-- Nội dung từng trang -->
+      <main class="page-body">
+        
+        <!-- ================= TASK 2: CARD ĐĂNG NHẬP / ĐĂNG KÝ ================= -->
+        <div class="auth-wrapper">
+          <div class="auth-card">
+            
+            <div class="auth-card-header">
+              <h2 id="auth-heading">Chào mừng bạn quay trở lại</h2>
+              <p id="auth-subheading">Vui lòng đăng nhập để bắt đầu phiên phỏng vấn</p>
+            </div>
+
+            <!-- Tab Switch -->
+            <div class="auth-tab-group">
+              <button type="button" class="tab-btn active" id="tab-login-btn" onclick="switchAuthMode('login')">
+                Đăng nhập
+              </button>
+              <button type="button" class="tab-btn" id="tab-register-btn" onclick="switchAuthMode('register')">
+                Đăng ký tài khoản
+              </button>
+            </div>
+
+            <!-- Alert message -->
+            <div id="auth-alert" class="alert-box" style="display: none;"></div>
+
+            <!-- Form Đăng nhập -->
+            <form id="form-login" onsubmit="handleLogin(event)" novalidate>
+              <div class="form-group">
+                <label for="login-email">Địa chỉ Email <span class="required">*</span></label>
+                <input type="email" id="login-email" class="form-control" placeholder="vidu@student.ptithcm.edu.vn">
+                <small class="error-text" id="err-login-email"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="login-password">Mật khẩu <span class="required">*</span></label>
+                <input type="password" id="login-password" class="form-control" placeholder="Nhập mật khẩu">
+                <small class="error-text" id="err-login-password"></small>
+              </div>
+
+              <button type="submit" class="btn-primary" id="btn-submit-login">Đăng nhập</button>
+            </form>
+
+            <!-- Form Đăng ký -->
+            <form id="form-register" onsubmit="handleRegister(event)" style="display: none;" novalidate>
+              <div class="form-group">
+                <label for="reg-fullname">Họ và tên <span class="required">*</span></label>
+                <input type="text" id="reg-fullname" class="form-control" placeholder="Nguyễn Văn A">
+                <small class="error-text" id="err-reg-fullname"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-email">Địa chỉ Email <span class="required">*</span></label>
+                <input type="email" id="reg-email" class="form-control" placeholder="vidu@student.ptithcm.edu.vn">
+                <small class="error-text" id="err-reg-email"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-password">Mật khẩu <span class="required">*</span></label>
+                <input type="password" id="reg-password" class="form-control" placeholder="Tối thiểu 6 ký tự">
+                <small class="error-text" id="err-reg-password"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-confirm-password">Xác nhận mật khẩu <span class="required">*</span></label>
+                <input type="password" id="reg-confirm-password" class="form-control" placeholder="Nhập lại mật khẩu">
+                <small class="error-text" id="err-reg-confirm"></small>
+              </div>
+
+              <button type="submit" class="btn-primary" id="btn-submit-register">Tạo tài khoản</button>
+            </form>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- JS chia theo từng module chức năng -->
+  <script src="js/layout.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
