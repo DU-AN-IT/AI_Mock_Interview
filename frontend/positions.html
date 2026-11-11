@@ -1,219 +1,171 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chọn vị trí - AI Mock Interview</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiết lập phỏng vấn - AI Mock Interview</title>
 
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/positions.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/positions.css">
 </head>
-
 <body>
 
-    <div class="layout-container">
+  <div class="layout-container">
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-
-            <div class="sidebar-brand">
-                <div class="brand-logo">AI</div>
-
-                <div class="brand-text">
-                    <h2>MockInterview</h2>
-                    <span>PTIT PROJECT</span>
-                </div>
-            </div>
-
-            <nav class="sidebar-menu">
-
-                <a href="index.html" class="menu-item">
-                    <span>🔐</span>
-                    <span>Tài khoản & Xác thực</span>
-                </a>
-
-                <a href="positions.html" class="menu-item active">
-                    <span>🎯</span>
-                    <span>Vị trí & Cấp độ</span>
-                </a>
-
-                <a href="#" class="menu-item">
-                    <span>💬</span>
-                    <span>Phòng phỏng vấn</span>
-                </a>
-
-                <a href="#" class="menu-item">
-                    <span>📊</span>
-                    <span>Lịch sử & Kết quả</span>
-                </a>
-
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <span class="user-status-dot"></span>
-                    <span>Đã đăng nhập</span>
-                </div>
-            </div>
-
-        </aside>
-
-        <!-- Main Content -->
-        <div class="main-content">
-
-            <header class="topbar">
-                <div class="topbar-title">
-                    <h1>Vị trí & Cấp độ</h1>
-                    <p>AI Mock Interview | Thiết lập phỏng vấn</p>
-                </div>
-
-                <div class="topbar-badge">
-                    <span class="badge-tag">Frontend Pure JS</span>
-                </div>
-            </header>
-
-            <main class="page-body">
-
-                <!-- TASK 3 -->
-                <div class="positions-wrapper">
-
-                    <div class="positions-header">
-                        <h2>Thiết lập buổi phỏng vấn</h2>
-                        <p>
-                            Hãy lựa chọn vị trí công việc và cấp độ
-                            phù hợp với mục tiêu của bạn.
-                        </p>
-                    </div>
-
-                    <!-- Chọn vị trí -->
-                    <div class="selection-section">
-
-                        <div class="section-heading">
-                            <div>
-                                <h3>1. Bạn muốn ứng tuyển vị trí nào?</h3>
-                                <p>Lựa chọn một vị trí công việc.</p>
-                            </div>
-
-                            <span class="selection-count"
-                                  id="position-count">
-                                Chưa chọn
-                            </span>
-                        </div>
-
-                        <div class="position-grid">
-
-                            <div class="position-card"
-                                 data-position="Frontend">
-                                <div class="position-icon">🎨</div>
-                                <h4>Frontend Developer</h4>
-                                <p>Phát triển giao diện website.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                            <div class="position-card"
-                                 data-position="Backend">
-                                <div class="position-icon">⚙️</div>
-                                <h4>Backend Developer</h4>
-                                <p>Xây dựng API và xử lý dữ liệu.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                            <div class="position-card"
-                                 data-position="Tester">
-                                <div class="position-icon">🧪</div>
-                                <h4>Tester</h4>
-                                <p>Kiểm thử và phát hiện lỗi phần mềm.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                            <div class="position-card"
-                                 data-position="BA">
-                                <div class="position-icon">📋</div>
-                                <h4>Business Analyst</h4>
-                                <p>Phân tích yêu cầu nghiệp vụ.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Chọn cấp độ -->
-                    <div class="selection-section">
-
-                        <div class="section-heading">
-                            <div>
-                                <h3>2. Cấp độ kinh nghiệm của bạn?</h3>
-                                <p>Lựa chọn một cấp độ phù hợp.</p>
-                            </div>
-
-                            <span class="selection-count"
-                                  id="level-count">
-                                Chưa chọn
-                            </span>
-                        </div>
-
-                        <div class="level-grid">
-
-                            <div class="level-card"
-                                 data-level="Intern">
-                                <div class="level-icon">🌱</div>
-                                <h4>Intern</h4>
-                                <p>Dành cho sinh viên thực tập.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                            <div class="level-card"
-                                 data-level="Fresher">
-                                <div class="level-icon">🚀</div>
-                                <h4>Fresher</h4>
-                                <p>Dành cho người mới tốt nghiệp.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                            <div class="level-card"
-                                 data-level="Junior">
-                                <div class="level-icon">💼</div>
-                                <h4>Junior</h4>
-                                <p>Dành cho người có kinh nghiệm cơ bản.</p>
-                                <span class="card-check">✓</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Kết quả lựa chọn -->
-                    <div class="selection-summary">
-
-                        <div>
-                            <span>Vị trí đã chọn:</span>
-                            <strong id="selected-position">Chưa chọn</strong>
-                        </div>
-
-                        <div>
-                            <span>Cấp độ đã chọn:</span>
-                            <strong id="selected-level">Chưa chọn</strong>
-                        </div>
-
-                    </div>
-
-                    <button type="button"
-                            class="btn-continue"
-                            id="btn-continue">
-                        Tiếp tục →
-                    </button>
-
-                    <p class="selection-message"
-                       id="selection-message"></p>
-
-                </div>
-
-            </main>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">AI</div>
+        <div class="brand-text">
+          <h2>MockInterview</h2>
+          <span>HỆ THỐNG LUYỆN TẬP</span>
         </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="index.html" class="menu-item">
+          <span>🔐</span>
+          <span>Tài khoản & Xác thực</span>
+        </a>
+        <a href="positions.html" class="menu-item active">
+          <span>🎯</span>
+          <span>Vị trí & Cấp độ</span>
+        </a>
+        <a href="#" class="menu-item">
+          <span>💬</span>
+          <span>Phòng phỏng vấn</span>
+        </a>
+        <a href="#" class="menu-item">
+          <span>📊</span>
+          <span>Lịch sử & Kết quả</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <span class="user-status-dot" style="background-color: var(--success);"></span>
+          <span id="user-display">Đã đăng nhập</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Vị trí & Cấp độ</h1>
+          <p>Lựa chọn cấu hình câu hỏi cho buổi phỏng vấn</p>
+        </div>
+      </header>
+
+      <main class="page-body">
+        <div class="positions-wrapper">
+
+          <div class="positions-header">
+            <h2>Thiết lập buổi phỏng vấn</h2>
+            <p>Hãy lựa chọn vị trí công việc và cấp độ phù hợp với mục tiêu rèn luyện của bạn.</p>
+          </div>
+
+          <!-- Chọn vị trí -->
+          <div class="selection-section">
+            <div class="section-heading">
+              <div>
+                <h3>1. Bạn muốn ứng tuyển vị trí nào?</h3>
+                <p>Lựa chọn một vị trí công việc.</p>
+              </div>
+              <span class="selection-count" id="position-count">Chưa chọn</span>
+            </div>
+
+            <div class="position-grid">
+              <div class="position-card" data-position="Frontend">
+                <div class="position-icon">🎨</div>
+                <h4>Frontend Developer</h4>
+                <p>Phát triển giao diện web với HTML, CSS, JavaScript.</p>
+                <span class="card-check">✓</span>
+              </div>
+
+              <div class="position-card" data-position="Backend">
+                <div class="position-icon">⚙️</div>
+                <h4>Backend Developer</h4>
+                <p>Xây dựng hệ thống REST API và xử lý dữ liệu cơ sở.</p>
+                <span class="card-check">✓</span>
+              </div>
+
+              <div class="position-card" data-position="Tester">
+                <div class="position-icon">🧪</div>
+                <h4>Tester</h4>
+                <p>Kiểm thử và phát hiện lỗi phần mềm theo tiêu chuẩn.</p>
+                <span class="card-check">✓</span>
+              </div>
+
+              <div class="position-card" data-position="BA">
+                <div class="position-icon">📋</div>
+                <h4>Business Analyst</h4>
+                <p>Phân tích yêu cầu nghiệp vụ và mô hình hóa giải pháp.</p>
+                <span class="card-check">✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chọn cấp độ -->
+          <div class="selection-section">
+            <div class="section-heading">
+              <div>
+                <h3>2. Cấp độ kinh nghiệm của bạn?</h3>
+                <p>Lựa chọn cấp độ để điều chỉnh độ khó câu hỏi.</p>
+              </div>
+              <span class="selection-count" id="level-count">Chưa chọn</span>
+            </div>
+
+            <div class="level-grid">
+              <div class="level-card" data-level="Intern">
+                <div class="level-icon">🌱</div>
+                <h4>Intern</h4>
+                <p>Dành cho sinh viên thực tập làm quen dự án.</p>
+                <span class="card-check">✓</span>
+              </div>
+
+              <div class="level-card" data-level="Fresher">
+                <div class="level-icon">🚀</div>
+                <h4>Fresher</h4>
+                <p>Dành cho người mới tốt nghiệp có nền tảng cơ bản.</p>
+                <span class="card-check">✓</span>
+              </div>
+
+              <div class="level-card" data-level="Junior">
+                <div class="level-icon">💼</div>
+                <h4>Junior</h4>
+                <p>Dành cho người đã có từ 1-2 năm kinh nghiệm thực tế.</p>
+                <span class="card-check">✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tóm tắt -->
+          <div class="selection-summary">
+            <div>
+              <span>Vị trí đã chọn:</span>
+              <strong id="selected-position">Chưa chọn</strong>
+            </div>
+            <div>
+              <span>Cấp độ đã chọn:</span>
+              <strong id="selected-level">Chưa chọn</strong>
+            </div>
+          </div>
+
+          <button type="button" class="btn-continue" id="btn-continue">
+            Xác nhận thiết lập
+          </button>
+
+          <p class="selection-message" id="selection-message"></p>
+
+        </div>
+      </main>
     </div>
+  </div>
 
-    <script src="js/positions.js"></script>
-
+  <script src="js/positions.js"></script>
 </body>
 </html>

@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Mock Interview</title>
+  <title>AI Mock Interview - Xác thực tài khoản</title>
   
-  <!-- CSS chia theo từng module chức năng -->
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
 
-  <!-- ================= TASK 1: KHUNG LAYOUT ================= -->
   <div class="layout-container">
     
     <!-- Sidebar -->
@@ -21,24 +19,24 @@
         <div class="brand-logo">AI</div>
         <div class="brand-text">
           <h2>MockInterview</h2>
-          <span>PTIT PROJECT</span>
+          <span>HỆ THỐNG LUYỆN TẬP</span>
         </div>
       </div>
 
       <nav class="sidebar-menu">
-        <a href="javascript:void(0)" class="menu-item active" data-menu="auth">
+        <a href="index.html" class="menu-item active">
           <span>🔐</span>
           <span>Tài khoản & Xác thực</span>
         </a>
-        <a href="javascript:void(0)" class="menu-item" data-menu="positions">
+        <a href="positions.html" class="menu-item">
           <span>🎯</span>
           <span>Vị trí & Cấp độ</span>
         </a>
-        <a href="javascript:void(0)" class="menu-item" data-menu="interview">
+        <a href="#" class="menu-item">
           <span>💬</span>
           <span>Phòng phỏng vấn</span>
         </a>
-        <a href="javascript:void(0)" class="menu-item" data-menu="history">
+        <a href="#" class="menu-item">
           <span>📊</span>
           <span>Lịch sử & Kết quả</span>
         </a>
@@ -55,21 +53,14 @@
     <!-- Main Content -->
     <div class="main-content">
       
-      <!-- Topbar -->
       <header class="topbar">
         <div class="topbar-title">
           <h1 id="page-header-title">Xác thực hệ thống</h1>
-          <p id="page-header-sub">Sprint 2 – Ngày 8 | AI Mock Interview</p>
-        </div>
-        <div class="topbar-badge">
-          <span class="badge-tag">Frontend Pure JS</span>
+          <p id="page-header-sub">Hệ thống phỏng vấn thử chuyên môn cùng Trí tuệ nhân tạo</p>
         </div>
       </header>
 
-      <!-- Nội dung từng trang -->
       <main class="page-body">
-        
-        <!-- ================= TASK 2: CARD ĐĂNG NHẬP / ĐĂNG KÝ ================= -->
         <div class="auth-wrapper">
           <div class="auth-card">
             
@@ -88,14 +79,13 @@
               </button>
             </div>
 
-            <!-- Alert message -->
             <div id="auth-alert" class="alert-box" style="display: none;"></div>
 
             <!-- Form Đăng nhập -->
             <form id="form-login" onsubmit="handleLogin(event)" novalidate>
               <div class="form-group">
                 <label for="login-email">Địa chỉ Email <span class="required">*</span></label>
-                <input type="email" id="login-email" class="form-control" placeholder="vidu@student.ptithcm.edu.vn">
+                <input type="email" id="login-email" class="form-control" placeholder="vidu@domain.com">
                 <small class="error-text" id="err-login-email"></small>
               </div>
 
@@ -118,7 +108,7 @@
 
               <div class="form-group">
                 <label for="reg-email">Địa chỉ Email <span class="required">*</span></label>
-                <input type="email" id="reg-email" class="form-control" placeholder="vidu@student.ptithcm.edu.vn">
+                <input type="email" id="reg-email" class="form-control" placeholder="vidu@domain.com">
                 <small class="error-text" id="err-reg-email"></small>
               </div>
 
@@ -139,13 +129,10 @@
 
           </div>
         </div>
-
       </main>
     </div>
   </div>
 
-  <!-- JS chia theo từng module chức năng -->
-  <script src="js/layout.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>
