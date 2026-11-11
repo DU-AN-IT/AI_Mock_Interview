@@ -1,6 +1,3 @@
-// =========================================================
-// CHUYỂN TAB ĐĂNG NHẬP / ĐĂNG KÝ
-// =========================================================
 function switchAuthMode(mode) {
   const tabLogin = document.getElementById("tab-login-btn");
   const tabRegister = document.getElementById("tab-register-btn");
@@ -29,7 +26,6 @@ function switchAuthMode(mode) {
   }
 }
 
-// Helpers
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -44,12 +40,8 @@ function setFieldError(fieldId, errorId, message) {
 }
 
 function clearAllErrors() {
-  document
-    .querySelectorAll(".form-control")
-    .forEach((input) => input.classList.remove("input-error"));
-  document
-    .querySelectorAll(".error-text")
-    .forEach((txt) => (txt.innerText = ""));
+  document.querySelectorAll(".form-control").forEach(input => input.classList.remove("input-error"));
+  document.querySelectorAll(".error-text").forEach(txt => (txt.innerText = ""));
 }
 
 function showAlert(message, type = "danger") {
@@ -65,9 +57,6 @@ function hideAlert() {
   alertEl.innerText = "";
 }
 
-// =========================================================
-// VALIDATION ĐĂNG NHẬP
-// =========================================================
 function handleLogin(event) {
   event.preventDefault();
   clearAllErrors();
@@ -78,44 +67,31 @@ function handleLogin(event) {
   let hasError = false;
 
   if (!email) {
-    setFieldError(
-      "login-email",
-      "err-login-email",
-      "Vui lòng nhập địa chỉ email.",
-    );
+    setFieldError("login-email", "err-login-email", "Vui lòng nhập địa chỉ email.");
     hasError = true;
   } else if (!isValidEmail(email)) {
-    setFieldError(
-      "login-email",
-      "err-login-email",
-      "Địa chỉ email không đúng định dạng.",
-    );
+    setFieldError("login-email", "err-login-email", "Địa chỉ email không đúng định dạng.");
     hasError = true;
   }
 
   if (!password) {
-    setFieldError(
-      "login-password",
-      "err-login-password",
-      "Vui lòng nhập mật khẩu.",
-    );
+    setFieldError("login-password", "err-login-password", "Vui lòng nhập mật khẩu.");
     hasError = true;
   }
 
   if (hasError) return;
 
-  showAlert("Đăng nhập thành công! Đang chuyển trang...", "success");
-
-  console.log("Dữ liệu đăng nhập:", { email, password });
+  showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+  
+  // Giả lập lưu phiên đăng nhập
+  localStorage.setItem("is_logged_in", "true");
+  localStorage.setItem("user_email", email);
 
   setTimeout(() => {
     window.location.href = "positions.html";
   }, 1000);
 }
 
-// =========================================================
-// VALIDATION ĐĂNG KÝ
-// =========================================================
 function handleRegister(event) {
   event.preventDefault();
   clearAllErrors();
@@ -128,18 +104,10 @@ function handleRegister(event) {
   let hasError = false;
 
   if (!fullname) {
-    setFieldError(
-      "reg-fullname",
-      "err-reg-fullname",
-      "Vui lòng nhập họ và tên.",
-    );
+    setFieldError("reg-fullname", "err-reg-fullname", "Vui lòng nhập họ và tên.");
     hasError = true;
   } else if (fullname.length < 2) {
-    setFieldError(
-      "reg-fullname",
-      "err-reg-fullname",
-      "Họ tên phải có ít nhất 2 ký tự.",
-    );
+    setFieldError("reg-fullname", "err-reg-fullname", "Họ tên phải có ít nhất 2 ký tự.");
     hasError = true;
   }
 
@@ -147,52 +115,29 @@ function handleRegister(event) {
     setFieldError("reg-email", "err-reg-email", "Vui lòng nhập địa chỉ email.");
     hasError = true;
   } else if (!isValidEmail(email)) {
-    setFieldError(
-      "reg-email",
-      "err-reg-email",
-      "Email không đúng định dạng hợp lệ.",
-    );
+    setFieldError("reg-email", "err-reg-email", "Email không đúng định dạng hợp lệ.");
     hasError = true;
   }
 
   if (!password) {
-    setFieldError(
-      "reg-password",
-      "err-reg-password",
-      "Vui lòng nhập mật khẩu.",
-    );
+    setFieldError("reg-password", "err-reg-password", "Vui lòng nhập mật khẩu.");
     hasError = true;
   } else if (password.length < 6) {
-    setFieldError(
-      "reg-password",
-      "err-reg-password",
-      "Mật khẩu phải từ 6 ký tự trở lên.",
-    );
+    setFieldError("reg-password", "err-reg-password", "Mật khẩu phải từ 6 ký tự trở lên.");
     hasError = true;
   }
 
   if (!confirmPassword) {
-    setFieldError(
-      "reg-confirm-password",
-      "err-reg-confirm",
-      "Vui lòng nhập lại mật khẩu.",
-    );
+    setFieldError("reg-confirm-password", "err-reg-confirm", "Vui lòng nhập lại mật khẩu.");
     hasError = true;
   } else if (confirmPassword !== password) {
-    setFieldError(
-      "reg-confirm-password",
-      "err-reg-confirm",
-      "Mật khẩu xác nhận không khớp.",
-    );
+    setFieldError("reg-confirm-password", "err-reg-confirm", "Mật khẩu xác nhận không khớp.");
     hasError = true;
   }
 
   if (hasError) return;
 
-  showAlert(
-    "Tạo tài khoản thành công! Đang chuyển sang màn hình đăng nhập...",
-    "success",
-  );
+  showAlert("Tạo tài khoản thành công! Đang chuyển sang màn hình đăng nhập...", "success");
   setTimeout(() => {
     document.getElementById("form-register").reset();
     switchAuthMode("login");
