@@ -40,6 +40,8 @@ document.querySelectorAll(".level-card").forEach(card => {
 // 3. XÁC NHẬN THIẾT LẬP
 document.getElementById("btn-continue").addEventListener("click", function() {
   const message = document.getElementById("selection-message");
+  const startButton = document.getElementById("btn-start-interview");
+  startButton.hidden = true;
 
   if (!selectedPosition) {
     message.style.color = "var(--danger)";
@@ -59,4 +61,5 @@ document.getElementById("btn-continue").addEventListener("click", function() {
 
   message.style.color = "var(--success)";
   message.innerText = `Đã lưu: ${selectedPosition} (${selectedLevel}). Thiết lập hoàn tất!`;
+  startButton.hidden = false;
 });
