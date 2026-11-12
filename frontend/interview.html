@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phòng phỏng vấn - AI Mock Interview</title>
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/interview.css">
+</head>
+<body>
+  <div class="layout-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">AI</div>
+        <div class="brand-text">
+          <h2>MockInterview</h2>
+          <span>HỆ THỐNG LUYỆN TẬP</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="index.html" class="menu-item">
+          <span>🔐</span>
+          <span>Tài khoản &amp; Xác thực</span>
+        </a>
+        <a href="positions.html" class="menu-item">
+          <span>🎯</span>
+          <span>Vị trí &amp; Cấp độ</span>
+        </a>
+        <a href="interview.html" class="menu-item active" aria-current="page">
+          <span>💬</span>
+          <span>Phòng phỏng vấn</span>
+        </a>
+        <a href="#" class="menu-item" aria-disabled="true">
+          <span>📊</span>
+          <span>Lịch sử &amp; Kết quả</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <span class="user-status-dot" style="background-color: var(--success);"></span>
+          <span id="user-display">Chế độ luyện tập</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Phòng phỏng vấn</h1>
+          <p>Luyện tập trả lời câu hỏi theo vị trí và cấp độ của bạn</p>
+        </div>
+        <a class="interview-exit-link" href="positions.html">← Thiết lập buổi</a>
+      </header>
+
+      <main class="page-body">
+        <div class="interview-wrapper">
+          <section class="session-heading" aria-label="Thông tin buổi phỏng vấn">
+            <div>
+              <span class="eyebrow">BUỔI LUYỆN TẬP CỦA BẠN</span>
+              <h2 id="session-title">Phỏng vấn thử</h2>
+              <p id="session-description">Chuẩn bị câu trả lời rõ ràng, súc tích và tự tin.</p>
+            </div>
+            <div class="session-status" id="session-status">
+              <span class="status-dot"></span>
+              <span>Sẵn sàng</span>
+            </div>
+          </section>
+
+          <div class="interview-grid" id="interview-content">
+            <section class="question-panel" aria-labelledby="question-title">
+              <div class="question-toolbar">
+                <span class="question-number" id="question-number">CÂU HỎI 01 / 05</span>
+                <span class="timer" id="timer" aria-label="Thời gian còn lại">30:00</span>
+              </div>
+
+              <div class="progress-track" role="progressbar" aria-label="Tiến độ câu hỏi" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1">
+                <span class="progress-fill" id="progress-fill"></span>
+              </div>
+
+              <div class="question-copy">
+                <span class="question-tag" id="question-tag">CÂU HỎI KHỞI ĐỘNG</span>
+                <h3 id="question-title"></h3>
+                <p id="question-hint">Hãy chia sẻ câu trả lời của bạn ở bên dưới.</p>
+              </div>
+
+              <label class="answer-label" for="answer-input">Câu trả lời của bạn</label>
+              <textarea id="answer-input" rows="8" placeholder="Nhập câu trả lời tại đây..."></textarea>
+              <div class="answer-meta">
+                <span id="word-count">0 từ</span>
+                <span>Câu trả lời chỉ được lưu trong phiên này.</span>
+              </div>
+
+              <div class="question-actions">
+                <button type="button" class="btn-secondary" id="btn-previous" disabled>← Câu trước</button>
+                <button type="button" class="btn-primary" id="btn-next">Bắt đầu trả lời <span aria-hidden="true">→</span></button>
+              </div>
+            </section>
+
+            <aside class="session-panel" aria-label="Tiến độ và gợi ý">
+              <div class="panel-card session-overview">
+                <div class="panel-title-row">
+                  <div class="panel-icon">✦</div>
+                  <div>
+                    <h3>Phiên phỏng vấn</h3>
+                    <p>Thông tin buổi luyện tập</p>
+                  </div>
+                </div>
+                <div class="session-detail">
+                  <span>Vị trí</span>
+                  <strong id="selected-position">Chưa thiết lập</strong>
+                </div>
+                <div class="session-detail">
+                  <span>Cấp độ</span>
+                  <strong id="selected-level">Chưa thiết lập</strong>
+                </div>
+                <div class="session-detail">
+                  <span>Tiến độ</span>
+                  <strong id="answered-count">0 / 5 câu đã trả lời</strong>
+                </div>
+                <a class="setup-link" href="positions.html">Thay đổi thiết lập <span aria-hidden="true">→</span></a>
+              </div>
+
+              <div class="panel-card tips-card">
+                <div class="tips-heading">
+                  <span aria-hidden="true">💡</span>
+                  <h3>Mẹo trả lời</h3>
+                </div>
+                <ul>
+                  <li>Nêu ý chính trước, sau đó giải thích ngắn gọn.</li>
+                  <li>Dùng ví dụ thực tế để làm rõ kinh nghiệm của bạn.</li>
+                  <li>Nếu chưa biết, hãy chia sẻ cách bạn sẽ tìm lời giải.</li>
+                </ul>
+              </div>
+
+              <button type="button" class="btn-end-session" id="btn-end-session">Kết thúc buổi phỏng vấn</button>
+            </aside>
+          </div>
+
+          <section class="completion-panel" id="completion-panel" hidden aria-live="polite">
+            <div class="completion-icon">✓</div>
+            <span class="eyebrow">BUỔI LUYỆN TẬP ĐÃ KẾT THÚC</span>
+            <h2>Bạn đã hoàn thành buổi phỏng vấn</h2>
+            <p id="completion-summary"></p>
+            <div class="completion-actions">
+              <a class="btn-primary" href="positions.html">Tạo buổi mới</a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/interview.js"></script>
+</body>
+</html>
