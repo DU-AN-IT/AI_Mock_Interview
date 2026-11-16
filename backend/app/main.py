@@ -1,32 +1,72 @@
-import logging
-
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.core.config import get_settings
-from app.db.session import get_engine
+from app.db.session import SessionLocal, engine
+from app.models.interview import InterviewLevel, JobPosition
+from backend.app.models.auth import Base
+from app.routers import auth, interviews
 
-logger = logging.getLogger(__name__)
+# 1. Tự động tạo tất cả các bảng trong MySQL từ thư mục models/ nếu chưa có
+Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AI Mock Interview API")
+
+# 2. Tự động nạp sẵn 4 vị trí và 3 cấp độ vào DB nếu bảng đang rỗng
+def seed_initial_data():
+    db = SessionLocal()
+    try:
+        if db.query(JobPosition).count() == 0:
+            db.add_all([
+                JobPosition(position_id=1, position_name="Frontend", description="Phát triển giao diện người dùng HTML, CSS, JavaScript"),
+                JobPosition(position_id=2, position_name="Backend", description="Xây dựng hệ thống REST API và xử lý cơ sở dữ liệu"),
+                JobPosition(position_id=3, position_name="Tester", description="Kiểm thử phần mềm và đảm bảo chất lượng hệ thống"),
+                JobPosition(position_id=4, position_name="BA", description="Phân tích nghiệp vụ và đặc tả yêu cầu phần mềm"),
+            ])
+        if db.query(InterviewLevel).count() == 0:
+            db.add_all([
+                InterviewLevel(level_id=1, level_name="Intern", description="Sinh viên thực tập nắm vững kiến thức nền tảng"),
+                InterviewLevel(level_id=2, level_name="Fresher", description="Người mới tốt nghiệp có kỹ năng làm việc cơ bản"),
+                InterviewLevel(level_id=3, level_name="Junior", description="Nhân sự có từ 1-2 năm kinh nghiệm thực tế"),
+            ])
+        db.commit()
+    except Exception:
+        db.rollback()
+    finally:
+        db.close()
 
 
-@app.get("/health")
-def health_check() -> dict[str, str]:
+seed_initial_data()
+
+app = FastAPI(
+    title="AI Mock Interview API",
+    version="1.0.0",
+    description="Backend API cho hệ thống Phỏng vấn thử với AI"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/health", tags=["Health"])
+def health_check():
     return {"status": "ok"}
 
 
-@app.get("/health/db")
-def database_health_check() -> dict[str, str]:
-    if not get_settings().database_url:
-        raise HTTPException(status_code=503, detail="DATABASE_URL is not configured")
-
+@app.get("/health/db", tags=["Health"])
+def db_health_check():
     try:
-        with get_engine().connect() as connection:
+        with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-    except SQLAlchemyError:
-        logger.exception("Database health check failed")
-        raise HTTPException(status_code=503, detail="Database connection failed") from None
+        return {"status": "ok", "database": "connected"}
+    except SQLAlchemyError as exc:
+        raise HTTPException(status_code=503, detail=f"Database connection failed: {str(exc)}")
 
-    return {"status": "ok", "database": "connected"}
+
+app.include_router(auth.router)
+app.include_router(interviews.router)
