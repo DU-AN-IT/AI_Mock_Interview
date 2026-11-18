@@ -5,10 +5,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.session import SessionLocal, engine
 from app.models.auth import Base, User
-from app.models.interview import InterviewLevel, InterviewSession, JobPosition
+from app.models.interview import InterviewLevel, InterviewSession, JobPosition, InterviewQuestion, InterviewAnswer
 from app.routers import auth, interview
 
-# Tự động tạo đủ 4 bảng (users, job_positions, interview_levels, interview_sessions)
+# Tự động tạo các bảng người dùng, phiên phỏng vấn, câu hỏi và câu trả lời
 Base.metadata.create_all(bind=engine)
 
 
@@ -45,8 +45,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "http://127.0.0.1:5501",
+        "http://localhost:5501",
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

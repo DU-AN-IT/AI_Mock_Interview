@@ -57,7 +57,7 @@ function hideAlert() {
   alertEl.innerText = "";
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault();
   clearAllErrors();
   hideAlert();
@@ -81,18 +81,25 @@ function handleLogin(event) {
 
   if (hasError) return;
 
-  showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
-  
-  // Giả lập lưu phiên đăng nhập
-  localStorage.setItem("is_logged_in", "true");
-  localStorage.setItem("user_email", email);
-
-  setTimeout(() => {
-    window.location.href = "positions.html";
-  }, 1000);
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Đăng nhập thất bại.");
+    localStorage.setItem("is_logged_in", "true");
+    localStorage.setItem("user_email", data.user.email);
+    localStorage.setItem("access_token", data.access_token);
+    showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+    setTimeout(() => window.location.href = "positions.html", 700);
+  } catch (error) {
+    showAlert(error.message || "Không thể kết nối đến máy chủ.");
+  }
 }
 
-function handleRegister(event) {
+async function handleRegister(event) {
   event.preventDefault();
   clearAllErrors();
   hideAlert();
@@ -137,10 +144,19 @@ function handleRegister(event) {
 
   if (hasError) return;
 
-  showAlert("Tạo tài khoản thành công! Đang chuyển sang màn hình đăng nhập...", "success");
-  setTimeout(() => {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ full_name: fullname, email, password })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Đăng ký thất bại.");
+    showAlert("Tạo tài khoản thành công! Vui lòng đăng nhập.", "success");
     document.getElementById("form-register").reset();
     switchAuthMode("login");
     document.getElementById("login-email").value = email;
-  }, 1200);
+  } catch (error) {
+    showAlert(error.message || "Không thể kết nối đến máy chủ.");
+  }
 }

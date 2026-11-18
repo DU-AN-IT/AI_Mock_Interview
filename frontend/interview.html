@@ -70,7 +70,10 @@
             </div>
           </section>
 
-          <div class="interview-grid" id="interview-content">
+          <div class="api-loading" id="question-loading" role="status">Đang kết nối máy chủ và dùng Gemini tạo 5 câu hỏi...</div>
+          <div class="api-error" id="question-error" role="alert" hidden></div>
+
+          <div class="interview-grid" id="interview-content" hidden>
             <section class="question-panel" aria-labelledby="question-title">
               <div class="question-toolbar">
                 <span class="question-number" id="question-number">CÂU HỎI 01 / 05</span>
@@ -91,8 +94,9 @@
               <textarea id="answer-input" rows="8" placeholder="Nhập câu trả lời tại đây..."></textarea>
               <div class="answer-meta">
                 <span id="word-count">0 từ</span>
-                <span>Câu trả lời chỉ được lưu trong phiên này.</span>
+                <span>Câu trả lời sẽ được gửi và lưu vào cơ sở dữ liệu.</span>
               </div>
+              <p class="submit-status" id="submit-status" role="status" aria-live="polite"></p>
 
               <div class="question-actions">
                 <button type="button" class="btn-secondary" id="btn-previous" disabled>← Câu trước</button>
