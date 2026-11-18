@@ -4,15 +4,14 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.session import SessionLocal, engine
-from app.models.interview import InterviewLevel, JobPosition
-from backend.app.models.auth import Base
-from app.routers import auth, interviews
+from app.models.auth import Base, User
+from app.models.interview import InterviewLevel, InterviewSession, JobPosition
+from app.routers import auth, interview
 
-# 1. Tự động tạo tất cả các bảng trong MySQL từ thư mục models/ nếu chưa có
+# Tự động tạo đủ 4 bảng (users, job_positions, interview_levels, interview_sessions)
 Base.metadata.create_all(bind=engine)
 
 
-# 2. Tự động nạp sẵn 4 vị trí và 3 cấp độ vào DB nếu bảng đang rỗng
 def seed_initial_data():
     db = SessionLocal()
     try:
@@ -69,4 +68,4 @@ def db_health_check():
 
 
 app.include_router(auth.router)
-app.include_router(interviews.router)
+app.include_router(interview.router)

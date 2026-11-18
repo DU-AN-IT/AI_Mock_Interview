@@ -1,12 +1,12 @@
 from datetime import datetime
 from sqlalchemy import BigInteger, Column, DateTime, Enum, ForeignKey, Integer, String, Text
-from backend.app.models.auth import Base
+from app.models.auth import Base
 
 
 class JobPosition(Base):
     __tablename__ = "job_positions"
 
-    position_id = Column(Integer, primary_key=True, autoincrement=True)
+    position_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     position_name = Column(String(100), unique=True, nullable=False)
     description = Column(Text, nullable=True)
 
@@ -14,7 +14,7 @@ class JobPosition(Base):
 class InterviewLevel(Base):
     __tablename__ = "interview_levels"
 
-    level_id = Column(Integer, primary_key=True, autoincrement=True)
+    level_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     level_name = Column(String(50), unique=True, nullable=False)
     description = Column(Text, nullable=True)
 
@@ -22,12 +22,12 @@ class InterviewLevel(Base):
 class InterviewSession(Base):
     __tablename__ = "interview_sessions"
 
-    session_id = Column(BigInteger, primary_key=True, autoincrement=True, index=True)
-    user_id = Column(BigInteger, ForeignKey("users.user_id"), nullable=False, index=True)
+    session_id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(BigInteger, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
     position_id = Column(Integer, ForeignKey("job_positions.position_id"), nullable=False)
     level_id = Column(Integer, ForeignKey("interview_levels.level_id"), nullable=False)
     status = Column(
-        Enum("CREATED", "IN_PROGRESS", "COMPLETED", "EVALUATED", name="session_status_enum"),
+        Enum("CREATED", "IN_PROGRESS", "COMPLETED", "EVALUATED", name="session_status"),
         nullable=False,
         default="CREATED"
     )
