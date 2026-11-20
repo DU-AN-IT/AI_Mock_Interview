@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
 
 from app.core.security import get_current_user, get_db
@@ -68,8 +68,8 @@ def get_interview_session(
     status_code=status.HTTP_201_CREATED,
 )
 def submit_answer(
-    session_id: int,
     payload: SubmitAnswerRequest,
+    session_id: int = Path(..., gt=0, description="Mã phiên phỏng vấn"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):

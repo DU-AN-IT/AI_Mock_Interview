@@ -49,6 +49,8 @@ Nếu Live Server chạy ở cổng khác `5500` hoặc `5501`, thêm địa ch�
 - Gemini tạo đúng 5 câu hỏi và lưu vào MySQL.
 - Gửi câu trả lời lên Backend, lưu hoặc cập nhật theo từng câu hỏi.
 - Có trạng thái đang gửi và thông báo lỗi; nội dung câu trả lời vẫn còn trên giao diện khi gửi lỗi.
+- Kiểm tra câu trả lời tối thiểu 1 ký tự sau khi loại bỏ khoảng trắng, tối đa 10.000 ký tự.
+- Gửi trùng câu hỏi sẽ nhận HTTP `409 Conflict` thay vì ghi đè dữ liệu.
 - Kết thúc phiên và cập nhật trạng thái `COMPLETED`.
 
 ## E. Các bảng database

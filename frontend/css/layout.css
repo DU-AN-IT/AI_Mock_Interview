@@ -209,3 +209,75 @@
     background-color: rgba(20, 184, 166, 0.1);
     font-weight: 700;
 }
+
+@media screen and (max-width: 768px) {
+  .layout-container {
+    display: block;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .sidebar-brand {
+    padding: 12px 16px;
+  }
+
+  .sidebar-menu {
+    padding: 8px 12px;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .menu-item {
+    flex: 0 0 auto;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0;
+    min-height: calc(100vh - 132px);
+  }
+
+  .topbar {
+    padding: 14px 16px;
+  }
+
+  .page-body {
+    padding: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .brand-text span {
+    display: none;
+  }
+
+  .sidebar-menu {
+    gap: 4px;
+  }
+
+  .menu-item {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .topbar-title h1 {
+    font-size: 16px;
+  }
+
+  .page-body {
+    padding: 12px;
+  }
+}

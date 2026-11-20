@@ -269,6 +269,11 @@ def submit_interview_answer(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Nội dung câu trả lời không được để trống.",
         )
+    if len(cleaned_answer) > 10000:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Câu trả lời không được vượt quá 10.000 ký tự.",
+        )
 
     question = (
         db.query(InterviewQuestion)
