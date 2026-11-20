@@ -5,10 +5,15 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.session import SessionLocal, engine
 from app.models.auth import Base, User
-from app.models.interview import InterviewLevel, InterviewSession, JobPosition
+from app.models.interview import (
+    InterviewAnswer,
+    InterviewLevel,
+    InterviewQuestion,
+    InterviewSession,
+    JobPosition,
+)
 from app.routers import auth, interview
 
-# Tự động tạo đủ 4 bảng (users, job_positions, interview_levels, interview_sessions)
 Base.metadata.create_all(bind=engine)
 
 
@@ -40,13 +45,13 @@ seed_initial_data()
 app = FastAPI(
     title="AI Mock Interview API",
     version="1.0.0",
-    description="Backend API cho hệ thống Phỏng vấn thử với AI"
+    description="Backend API cho hệ thống Phỏng vấn thử với AI",
 )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
