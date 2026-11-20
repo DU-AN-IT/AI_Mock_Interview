@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch sử phỏng vấn - AI Mock Interview</title>
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/history.css" />
+  </head>
+  <body>
+    <div class="layout-container">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo">AI</div>
+
+          <div class="brand-text">
+            <h2>MockInterview</h2>
+            <span>HỆ THỐNG LUYỆN TẬP</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="index.html" class="menu-item">
+            <span>🔐</span>
+            Tài khoản & Xác thực
+          </a>
+
+          <a href="positions.html" class="menu-item">
+            <span>🎯</span>
+            Vị trí & Cấp độ
+          </a>
+
+          <a href="interview.html" class="menu-item">
+            <span>🗣️</span>
+            Phòng phỏng vấn
+          </a>
+
+          <div class="menu-dropdown">
+            <button
+              type="button"
+              class="menu-item dropdown-toggle"
+              id="history-toggle"
+              aria-expanded="false"
+              aria-controls="history-submenu"
+            >
+              <span>📊</span>
+              <span>Lịch sử & Kết quả</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+
+            <div class="submenu" id="history-submenu" hidden>
+              <a href="history.html" class="submenu-item">
+                Lịch sử phỏng vấn
+              </a>
+
+              <a href="results.html" class="submenu-item">
+                Kết quả phỏng vấn
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <span class="user-status-dot"></span>
+            <span id="sidebar-username">test</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h1>Lịch sử phỏng vấn</h1>
+            <p>Xem lại các phiên phỏng vấn đã thực hiện</p>
+          </div>
+          <span class="badge-tag">Frontend Pure JS</span>
+        </header>
+
+        <div class="page-body">
+          <div class="history-wrapper">
+            <div id="demo-notice" class="history-notice" hidden>
+              Đang hiển thị dữ liệu mẫu. Chưa kết nối API lịch sử.
+            </div>
+
+            <section class="history-card">
+              <div class="history-toolbar">
+                <div>
+                  <h3>Danh sách phiên đã thực hiện</h3>
+                  <p>
+                    Tổng cộng
+                    <strong id="history-count">0</strong>
+                    phiên
+                  </p>
+                </div>
+
+                <div class="history-filters">
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="history-search"
+                    placeholder="Tìm theo vị trí..."
+                  />
+
+                  <select id="level-filter" class="history-select">
+                    <option value="">Tất cả cấp độ</option>
+                    <option value="Intern">Intern</option>
+                    <option value="Fresher">Fresher</option>
+                    <option value="Junior">Junior</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="history-table-wrapper">
+                <table class="history-table">
+                  <thead>
+                    <tr>
+                      <th>Ngày thực hiện</th>
+                      <th>Vị trí</th>
+                      <th>Cấp độ</th>
+                      <th>Điểm tổng</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="history-body"></tbody>
+                </table>
+              </div>
+
+              <p id="history-empty" class="history-empty" hidden>
+                Không tìm thấy phiên phỏng vấn phù hợp.
+              </p>
+            </section>
+
+            <div class="history-actions">
+              <a href="positions.html" class="history-btn">
+                + Bắt đầu phỏng vấn mới
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/mock-data.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/sidebar.js"></script>
+  </body>
+</html>

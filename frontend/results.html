@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kết quả phỏng vấn - AI Mock Interview</title>
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/results.css" />
+  </head>
+  <body>
+    <div class="layout-container">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo">AI</div>
+
+          <div class="brand-text">
+            <h2>MockInterview</h2>
+            <span>HỆ THỐNG LUYỆN TẬP</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-menu">
+          <a href="index.html" class="menu-item">
+            <span>🔐</span>
+            Tài khoản & Xác thực
+          </a>
+
+          <a href="positions.html" class="menu-item">
+            <span>🎯</span>
+            Vị trí & Cấp độ
+          </a>
+
+          <a href="interview.html" class="menu-item">
+            <span>🗣️</span>
+            Phòng phỏng vấn
+          </a>
+
+          <div class="menu-dropdown">
+            <button
+              type="button"
+              class="menu-item dropdown-toggle"
+              id="history-toggle"
+              aria-expanded="false"
+              aria-controls="history-submenu"
+            >
+              <span>📊</span>
+              <span>Lịch sử & Kết quả</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+
+            <div class="submenu" id="history-submenu" hidden>
+              <a href="history.html" class="submenu-item">
+                Lịch sử phỏng vấn
+              </a>
+
+              <a href="results.html" class="submenu-item">
+                Kết quả phỏng vấn
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <span class="user-status-dot"></span>
+            <span id="sidebar-username">test</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h1>Kết quả phỏng vấn</h1>
+            <p>Đánh giá năng lực sau phiên phỏng vấn</p>
+          </div>
+          <span class="badge-tag">Frontend Pure JS</span>
+        </header>
+
+        <div class="page-body">
+          <div class="results-wrapper">
+            <div id="demo-notice" class="result-notice" hidden>
+              Đây là dữ liệu mẫu để kiểm thử giao diện, chưa phải kết quả AI
+              thực tế.
+            </div>
+
+            <section class="result-card result-overview">
+              <div class="result-overview-info">
+                <span class="result-eyebrow"> BÁO CÁO ĐÁNH GIÁ </span>
+                <h2 id="result-position">--</h2>
+                <p id="result-meta">--</p>
+                <span id="result-status" class="result-tag"> Đang tải </span>
+              </div>
+
+              <div class="result-score-circle">
+                <strong id="result-score">--</strong>
+                <span>/ 100 điểm</span>
+              </div>
+            </section>
+
+            <section class="result-card">
+              <h3>Nhận xét tổng quan</h3>
+              <p id="result-feedback" class="result-feedback">
+                Đang tải nhận xét...
+              </p>
+            </section>
+
+            <div class="result-feedback-grid">
+              <section class="result-card result-strengths">
+                <h3>✓ Điểm mạnh</h3>
+                <ul id="result-strengths" class="result-list"></ul>
+              </section>
+
+              <section class="result-card result-weaknesses">
+                <h3>△ Điểm cần cải thiện</h3>
+                <ul id="result-weaknesses" class="result-list"></ul>
+              </section>
+            </div>
+
+            <section class="result-card">
+              <h3>Thông tin phiên phỏng vấn</h3>
+
+              <div class="result-detail-grid">
+                <div class="result-detail-item">
+                  <span>Mã phiên</span>
+                  <strong id="result-id">--</strong>
+                </div>
+
+                <div class="result-detail-item">
+                  <span>Ngày thực hiện</span>
+                  <strong id="result-date">--</strong>
+                </div>
+
+                <div class="result-detail-item">
+                  <span>Vị trí ứng tuyển</span>
+                  <strong id="result-position-detail">--</strong>
+                </div>
+
+                <div class="result-detail-item">
+                  <span>Cấp độ</span>
+                  <strong id="result-level">--</strong>
+                </div>
+              </div>
+            </section>
+
+            <div class="result-actions">
+              <a href="history.html" class="result-btn result-btn-outline">
+                Xem lịch sử
+              </a>
+
+              <a href="positions.html" class="result-btn"> Phỏng vấn lại </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/mock-data.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/sidebar.js"></script>
+  </body>
+</html>
