@@ -1,191 +1,351 @@
-const questionSets = {
-  Frontend: [
-    "Hãy giới thiệu ngắn gọn về bản thân và lý do bạn chọn phát triển Frontend.",
-    "Bạn giải thích sự khác nhau giữa let, const và var trong JavaScript như thế nào?",
-    "Bạn thường tổ chức CSS thế nào để giao diện dễ bảo trì và hoạt động tốt trên nhiều kích thước màn hình?",
-    "Hãy kể về một lỗi giao diện khó mà bạn từng gặp và cách bạn xử lý.",
-    "Bạn sẽ làm gì để cải thiện hiệu năng tải trang web?"
-  ],
-  Backend: [
-    "Hãy giới thiệu ngắn gọn về bản thân và kinh nghiệm phát triển Backend của bạn.",
-    "Bạn thiết kế một REST API dễ sử dụng và dễ mở rộng như thế nào?",
-    "Bạn sẽ xử lý xác thực và phân quyền người dùng trong một ứng dụng ra sao?",
-    "Hãy kể về một vấn đề hiệu năng hoặc lỗi hệ thống mà bạn từng xử lý.",
-    "Bạn sẽ bảo vệ API và dữ liệu trước các truy cập không hợp lệ như thế nào?"
-  ],
-  Tester: [
-    "Hãy giới thiệu ngắn gọn về bản thân và lý do bạn chọn công việc kiểm thử phần mềm.",
-    "Bạn sẽ viết test case cho chức năng đăng nhập như thế nào?",
-    "Bạn phân biệt kiểm thử hồi quy và kiểm thử xác nhận ra sao?",
-    "Hãy mô tả cách bạn báo cáo một lỗi để nhóm phát triển có thể tái hiện.",
-    "Khi thời gian kiểm thử bị giới hạn, bạn ưu tiên kiểm thử những gì?"
-  ],
-  BA: [
-    "Hãy giới thiệu ngắn gọn về bản thân và kinh nghiệm phân tích nghiệp vụ của bạn.",
-    "Bạn sẽ làm rõ một yêu cầu còn mơ hồ từ khách hàng như thế nào?",
-    "Bạn thường dùng cách nào để mô hình hóa quy trình nghiệp vụ?",
-    "Hãy kể về một lần các bên liên quan có yêu cầu mâu thuẫn và cách bạn xử lý.",
-    "Bạn xác nhận một yêu cầu đã được đáp ứng bằng cách nào?"
-  ]
+const state = {
+  sessionId: null,
+  positionName: "",
+  levelName: "",
+  sessionStatus: "CREATED",
+  questions: [],
+  currentIndex: 0,
+  drafts: {},
+  isLoadingSession: false,
+  isSubmitting: false,
+  lastFailedAction: null,
 };
 
-const position = localStorage.getItem("selected_position") || "";
-const level = localStorage.getItem("selected_level") || "";
-const questions = questionSets[position] || [
-  "Hãy giới thiệu ngắn gọn về bản thân và mục tiêu nghề nghiệp của bạn.",
-  "Bạn tự hào nhất về kỹ năng hoặc dự án nào của mình?",
-  "Bạn thường giải quyết một vấn đề mới mà mình chưa biết như thế nào?",
-  "Hãy kể về một lần bạn nhận được góp ý và đã cải thiện bản thân.",
-  "Bạn mong muốn phát triển điều gì trong công việc tiếp theo?"
-];
-const answers = Array(questions.length).fill("");
-const sessionDuration = 30 * 60;
+const els = {
+  banner: document.getElementById("status-banner"),
+  bannerText: document.getElementById("status-banner-text"),
+  btnRetry: document.getElementById("btn-retry"),
+  userStatus: document.getElementById("interview-user-status"),
+  sessionBadgeInfo: document.getElementById("session-badge-info"),
+  sessionIdLabel: document.getElementById("session-id-label"),
+  metaPosition: document.getElementById("meta-position"),
+  metaLevel: document.getElementById("meta-level"),
+  metaStatus: document.getElementById("meta-status"),
+  progressFill: document.getElementById("progress-fill"),
+  progressText: document.getElementById("progress-text"),
+  questionSteps: document.getElementById("question-steps"),
+  questionIndexBadge: document.getElementById("question-index-badge"),
+  answerStateBadge: document.getElementById("answer-state-badge"),
+  questionContent: document.getElementById("question-content"),
+  answerInput: document.getElementById("answer-input"),
+  wordCount: document.getElementById("word-count"),
+  btnPrev: document.getElementById("btn-prev"),
+  btnSubmit: document.getElementById("btn-submit-answer"),
+  btnNext: document.getElementById("btn-next"),
+  btnLogout: document.getElementById("btn-logout"),
+};
 
-let currentQuestion = 0;
-let timeRemaining = sessionDuration;
-let timerInterval = null;
-let sessionStarted = false;
-let sessionFinished = false;
+function showBanner(type, message, showRetry = false) {
+  els.banner.className = `status-banner show ${type}`;
+  if (type === "loading") {
+    els.bannerText.innerHTML = `<span class="spinner"></span> ${message}`;
+  } else {
+    els.bannerText.textContent = message;
+  }
+  els.btnRetry.style.display = showRetry ? "inline-flex" : "none";
+}
 
-const questionNumber = document.getElementById("question-number");
-const questionTag = document.getElementById("question-tag");
-const questionTitle = document.getElementById("question-title");
-const answerInput = document.getElementById("answer-input");
-const wordCount = document.getElementById("word-count");
-const timer = document.getElementById("timer");
-const progressBar = document.querySelector('[role="progressbar"]');
-const progressFill = document.getElementById("progress-fill");
-const nextButton = document.getElementById("btn-next");
-const previousButton = document.getElementById("btn-previous");
-const sessionStatus = document.getElementById("session-status");
-const endButton = document.getElementById("btn-end-session");
+function hideBanner() {
+  els.banner.className = "status-banner";
+  els.btnRetry.style.display = "none";
+}
 
-function renderQuestion() {
-  const questionIndex = currentQuestion;
-  questionNumber.textContent = `CÂU HỎI ${String(questionIndex + 1).padStart(2, "0")} / ${String(questions.length).padStart(2, "0")}`;
-  questionTag.textContent = questionIndex === 0 ? "CÂU HỎI KHỞI ĐỘNG" : "CÂU HỎI CHUYÊN MÔN";
-  questionTitle.textContent = questions[questionIndex];
-  answerInput.value = answers[questionIndex];
-  previousButton.disabled = questionIndex === 0;
-  nextButton.innerHTML = sessionStarted
-    ? questionIndex === questions.length - 1 ? "Hoàn thành <span aria-hidden=\"true\">✓</span>" : "Lưu &amp; câu tiếp <span aria-hidden=\"true\">→</span>"
-    : "Bắt đầu trả lời <span aria-hidden=\"true\">→</span>";
-  progressFill.style.width = `${((questionIndex + 1) / questions.length) * 100}%`;
-  progressBar.setAttribute("aria-valuenow", String(questionIndex + 1));
-  updateWordCount();
+function countWords(text) {
+  const trimmed = text.trim();
+  return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 
 function updateWordCount() {
-  const words = answerInput.value.trim().match(/\S+/g);
-  wordCount.textContent = `${words ? words.length : 0} từ`;
+  els.wordCount.textContent = `${countWords(els.answerInput.value)} từ`;
 }
 
-function updateAnsweredCount() {
-  const answered = answers.filter(answer => answer.trim().length > 0).length;
-  document.getElementById("answered-count").textContent = `${answered} / ${questions.length} câu đã trả lời`;
+function renderStatusBadge() {
+  const statusMap = {
+    CREATED: "Mới tạo",
+    IN_PROGRESS: "Đang phỏng vấn",
+    COMPLETED: "Đã hoàn thành 5/5 câu",
+    EVALUATED: "Đã chấm điểm",
+  };
+  els.metaStatus.textContent = statusMap[state.sessionStatus] || state.sessionStatus;
+  els.metaStatus.className =
+    state.sessionStatus === "COMPLETED" || state.sessionStatus === "EVALUATED"
+      ? "badge badge-completed"
+      : "badge badge-status";
 }
 
-function updateTimer() {
-  const minutes = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
-  timer.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+function renderProgress() {
+  const total = state.questions.length || 5;
+  const answered = state.questions.filter((q) => q.answered).length;
+  const percent = Math.round((answered / total) * 100);
+  els.progressFill.style.width = `${percent}%`;
+  els.progressText.textContent = `${answered} / ${total} câu đã gửi`;
+}
 
-  if (timeRemaining <= 5 * 60) {
-    timer.classList.add("is-low");
+function renderQuestionSteps() {
+  els.questionSteps.innerHTML = "";
+  state.questions.forEach((q, idx) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "step-btn";
+    if (idx === state.currentIndex) btn.classList.add("active");
+    if (q.answered) btn.classList.add("answered");
+    btn.textContent = q.answered ? `Câu ${q.question_order} ✓` : `Câu ${q.question_order}`;
+    btn.disabled = state.isSubmitting;
+    btn.addEventListener("click", () => {
+      saveCurrentDraft();
+      state.currentIndex = idx;
+      hideBanner();
+      renderCurrentQuestion();
+    });
+    els.questionSteps.appendChild(btn);
+  });
+}
+
+function saveCurrentDraft() {
+  const q = state.questions[state.currentIndex];
+  if (q && !q.answered) {
+    state.drafts[q.question_id] = els.answerInput.value;
+  }
+}
+
+function renderCurrentQuestion() {
+  const total = state.questions.length;
+  if (!total) return;
+
+  const q = state.questions[state.currentIndex];
+  els.sessionIdLabel.textContent = `Phiên #${state.sessionId}`;
+  els.sessionBadgeInfo.textContent = `Vị trí: ${state.positionName} | Cấp độ: ${state.levelName} | Tổng: ${total} câu hỏi`;
+  els.metaPosition.textContent = `Vị trí: ${state.positionName}`;
+  els.metaLevel.textContent = `Cấp độ: ${state.levelName}`;
+  els.questionIndexBadge.textContent = `Câu hỏi ${q.question_order} / ${total}`;
+  els.questionContent.textContent = q.question_content;
+
+  if (q.answered) {
+    els.answerStateBadge.textContent = "Đã lưu lên hệ thống";
+    els.answerStateBadge.className = "badge badge-completed";
+    els.answerInput.value = q.answer_content || "";
+    els.answerInput.disabled = true;
+    els.btnSubmit.disabled = true;
+    els.btnSubmit.textContent = "Đã gửi câu trả lời";
+  } else {
+    els.answerStateBadge.textContent = "Chưa gửi";
+    els.answerStateBadge.className = "badge";
+    els.answerInput.value = state.drafts[q.question_id] || "";
+    els.answerInput.disabled = state.isSubmitting;
+    els.btnSubmit.disabled = state.isSubmitting;
+    els.btnSubmit.innerHTML = state.isSubmitting
+      ? `<span class="spinner"></span> Đang gửi câu trả lời...`
+      : "Gửi câu trả lời";
   }
 
-  if (timeRemaining <= 0) {
-    finishSession();
+  els.btnPrev.disabled = state.isSubmitting || state.currentIndex === 0;
+  els.btnNext.disabled = state.isSubmitting || state.currentIndex >= total - 1;
+
+  updateWordCount();
+  renderStatusBadge();
+  renderProgress();
+  renderQuestionSteps();
+}
+
+function applySessionData(sessionData, keepCurrentIndex = false) {
+  state.sessionId = sessionData.session_id;
+  state.positionName = sessionData.position_name;
+  state.levelName = sessionData.level_name;
+  state.sessionStatus = sessionData.status;
+  state.questions = sessionData.questions || [];
+  localStorage.setItem("current_session_id", String(state.sessionId));
+
+  if (!keepCurrentIndex) {
+    const firstUnanswered = state.questions.findIndex((q) => !q.answered);
+    state.currentIndex = firstUnanswered >= 0 ? firstUnanswered : 0;
+  }
+  renderCurrentQuestion();
+}
+
+async function initInterviewSession() {
+  if (!getAccessToken()) {
+    showBanner("error", "Bạn chưa đăng nhập. Vui lòng đăng nhập trước khi bắt đầu phỏng vấn.");
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1200);
     return;
   }
 
-  timeRemaining -= 1;
+  const userName = localStorage.getItem("user_name");
+  if (els.userStatus && userName) {
+    els.userStatus.textContent = userName;
+  }
+
+  state.isLoadingSession = true;
+  state.lastFailedAction = initInterviewSession;
+  showBanner("loading", "Đang tải phiên phỏng vấn và 5 câu hỏi từ AI...", false);
+
+  const savedSessionId = localStorage.getItem("current_session_id");
+  const selectedPosition =
+    localStorage.getItem("selected_position") ||
+    localStorage.getItem("interview_position") ||
+    "Backend";
+  const selectedLevel =
+    localStorage.getItem("selected_level") ||
+    localStorage.getItem("interview_level") ||
+    "Fresher";
+
+  try {
+    let res;
+    if (savedSessionId) {
+      res = await apiRequest(`/api/interviews/${savedSessionId}`, { method: "GET" });
+      if (!res.data.questions || res.data.questions.length < 5) {
+        const gen = await apiRequest(`/api/interviews/${savedSessionId}/questions/generate`, {
+          method: "POST",
+        });
+        res.data.questions = gen.questions;
+        res.data.status = gen.status;
+      }
+    } else {
+      res = await apiRequest("/api/interviews", {
+        method: "POST",
+        body: {
+          position: selectedPosition,
+          level: selectedLevel,
+        },
+      });
+    }
+
+    hideBanner();
+    applySessionData(res.data);
+  } catch (err) {
+    if (err.status === 401) {
+      showBanner("error", "Phiên đăng nhập đã hết hạn. Đang chuyển về trang đăng nhập...");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("current_session_id");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1200);
+      return;
+    }
+    if ((err.status === 404 || err.status === 403) && savedSessionId) {
+      localStorage.removeItem("current_session_id");
+      return initInterviewSession();
+    }
+    showBanner("error", `Lỗi tải phiên phỏng vấn: ${err.message}`, true);
+  } finally {
+    state.isLoadingSession = false;
+  }
 }
 
-function startSession() {
-  if (sessionStarted || sessionFinished) {
+async function handleSubmitAnswer() {
+  const q = state.questions[state.currentIndex];
+  if (!q || q.answered || state.isSubmitting) return;
+
+  const content = els.answerInput.value.trim();
+  if (!content) {
+    showBanner("error", "Vui lòng nhập nội dung câu trả lời trước khi gửi.");
+    els.answerInput.focus();
     return;
   }
 
-  sessionStarted = true;
-  sessionStatus.classList.add("is-live");
-  sessionStatus.querySelector("span:last-child").textContent = "Đang diễn ra";
-  timerInterval = window.setInterval(updateTimer, 1000);
-  updateTimer();
-  renderQuestion();
+  state.isSubmitting = true;
+  state.lastFailedAction = handleSubmitAnswer;
+  state.drafts[q.question_id] = content;
+  renderCurrentQuestion();
+  showBanner("loading", `Đang gửi câu trả lời cho câu hỏi ${q.question_order}...`, false);
+
+  try {
+    const res = await apiRequest(`/api/interviews/${state.sessionId}/answers`, {
+      method: "POST",
+      body: {
+        question_id: q.question_id,
+        answer_content: content,
+      },
+    });
+
+    q.answered = true;
+    q.answer_content = res.data.answer_content;
+    delete state.drafts[q.question_id];
+    state.sessionStatus = res.data.session_status;
+
+    if (state.sessionStatus === "COMPLETED") {
+      showBanner(
+        "success",
+        "Bạn đã gửi đủ 5/5 câu trả lời! Phiên phỏng vấn đã hoàn tất (COMPLETED)."
+      );
+    } else {
+      showBanner("success", `Đã lưu câu trả lời câu ${q.question_order} thành công.`);
+      const nextUnanswered = state.questions.findIndex((item) => !item.answered);
+      if (nextUnanswered >= 0) {
+        state.currentIndex = nextUnanswered;
+      }
+    }
+  } catch (err) {
+    if (err.status === 401) {
+      showBanner("error", "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+      localStorage.removeItem("access_token");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1200);
+      return;
+    }
+    if (err.status === 409) {
+      try {
+        const refreshed = await apiRequest(`/api/interviews/${state.sessionId}`, { method: "GET" });
+        applySessionData(refreshed.data, true);
+      } catch {
+        q.answered = true;
+        q.answer_content = content;
+      }
+      showBanner("error", "Câu hỏi này đã được nộp trước đó. Hệ thống đã đồng bộ lại nội dung đã lưu.");
+    } else {
+      showBanner(
+        "error",
+        `Gửi câu trả lời thất bại: ${err.message} (Nội dung bạn nhập vẫn được giữ nguyên).`,
+        true
+      );
+    }
+  } finally {
+    state.isSubmitting = false;
+    renderCurrentQuestion();
+  }
 }
 
-function finishSession() {
-  if (sessionFinished) {
-    return;
-  }
-
-  sessionFinished = true;
-  window.clearInterval(timerInterval);
-  answers[currentQuestion] = answerInput.value;
-  updateAnsweredCount();
-
-  const answered = answers.filter(answer => answer.trim().length > 0).length;
-  document.getElementById("completion-summary").textContent =
-    `Bạn đã trả lời ${answered} trên ${questions.length} câu hỏi${position ? ` cho vị trí ${position}` : ""}. Câu trả lời chỉ tồn tại trong phiên hiện tại và không được gửi lên máy chủ.`;
-  document.getElementById("interview-content").hidden = true;
-  document.querySelector(".session-heading").hidden = true;
-  document.getElementById("completion-panel").hidden = false;
-  sessionStatus.classList.remove("is-live");
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const email = localStorage.getItem("user_email");
-  if (email) {
-    document.getElementById("user-display").textContent = email.split("@")[0];
-  }
-
-  document.getElementById("session-title").textContent =
-    position ? `Phỏng vấn ${position}` : "Phỏng vấn thử";
-  document.getElementById("session-description").textContent =
-    position && level ? `Bộ câu hỏi ${position} dành cho cấp độ ${level}.` : "Bạn có thể chọn vị trí và cấp độ để cá nhân hóa bộ câu hỏi.";
-  document.getElementById("selected-position").textContent = position || "Chưa thiết lập";
-  document.getElementById("selected-level").textContent = level || "Chưa thiết lập";
-
-  renderQuestion();
-
-  answerInput.addEventListener("input", () => {
-    answers[currentQuestion] = answerInput.value;
-    updateWordCount();
-    updateAnsweredCount();
-  });
-
-  nextButton.addEventListener("click", () => {
-    if (!sessionStarted) {
-      startSession();
-      return;
-    }
-
-    answers[currentQuestion] = answerInput.value;
-    updateAnsweredCount();
-    if (currentQuestion === questions.length - 1) {
-      finishSession();
-      return;
-    }
-
-    currentQuestion += 1;
-    renderQuestion();
-  });
-
-  previousButton.addEventListener("click", () => {
-    if (currentQuestion === 0 || !sessionStarted) {
-      return;
-    }
-
-    answers[currentQuestion] = answerInput.value;
-    currentQuestion -= 1;
-    renderQuestion();
-    updateAnsweredCount();
-  });
-
-  endButton.addEventListener("click", () => {
-    if (window.confirm("Bạn có chắc muốn kết thúc buổi phỏng vấn?")) {
-      finishSession();
-    }
-  });
+els.answerInput.addEventListener("input", () => {
+  saveCurrentDraft();
+  updateWordCount();
 });
+
+els.btnSubmit.addEventListener("click", handleSubmitAnswer);
+
+els.btnPrev.addEventListener("click", () => {
+  if (state.currentIndex > 0) {
+    saveCurrentDraft();
+    state.currentIndex -= 1;
+    hideBanner();
+    renderCurrentQuestion();
+  }
+});
+
+els.btnNext.addEventListener("click", () => {
+  if (state.currentIndex < state.questions.length - 1) {
+    saveCurrentDraft();
+    state.currentIndex += 1;
+    hideBanner();
+    renderCurrentQuestion();
+  }
+});
+
+els.btnRetry.addEventListener("click", () => {
+  if (typeof state.lastFailedAction === "function") {
+    state.lastFailedAction();
+  }
+});
+
+if (els.btnLogout) {
+  els.btnLogout.addEventListener("click", () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("is_logged_in");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("current_session_id");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initInterviewSession);
