@@ -1,14 +1,7 @@
-from functools import lru_cache
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy import Engine, create_engine
+from app.core.config import settings
 
-from app.core.config import get_settings
-
-
-@lru_cache
-def get_engine() -> Engine:
-    database_url = get_settings().database_url
-    if not database_url:
-        raise RuntimeError("DATABASE_URL is not configured")
-
-    return create_engine(database_url, pool_pre_ping=True)
+engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

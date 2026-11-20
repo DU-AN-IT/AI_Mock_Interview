@@ -1,3 +1,28 @@
+const AUTH_API_BASE = typeof API_BASE_URL !== "undefined" ? API_BASE_URL : "http://127.0.0.1:8000";
+
+async function callAuthApi(endpoint, payload) {
+  if (typeof apiRequest === "function") {
+    return apiRequest(endpoint, { method: "POST", body: payload });
+  }
+
+  let response;
+  try {
+    response = await fetch(`${AUTH_API_BASE}${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw new Error("Không thể kết nối đến Backend (http://127.0.0.1:8000). Hãy kiểm tra server FastAPI đang chạy.");
+  }
+
+  const data = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error((data && (data.detail || data.message)) || `Lỗi hệ thống (HTTP ${response.status}).`);
+  }
+  return data;
+}
+
 function switchAuthMode(mode) {
   const tabLogin = document.getElementById("tab-login-btn");
   const tabRegister = document.getElementById("tab-register-btn");
@@ -40,12 +65,13 @@ function setFieldError(fieldId, errorId, message) {
 }
 
 function clearAllErrors() {
-  document.querySelectorAll(".form-control").forEach(input => input.classList.remove("input-error"));
-  document.querySelectorAll(".error-text").forEach(txt => (txt.innerText = ""));
+  document.querySelectorAll(".form-control").forEach((input) => input.classList.remove("input-error"));
+  document.querySelectorAll(".error-text").forEach((txt) => (txt.innerText = ""));
 }
 
 function showAlert(message, type = "danger") {
   const alertEl = document.getElementById("auth-alert");
+  if (!alertEl) return;
   alertEl.className = `alert-box alert-${type}`;
   alertEl.innerText = message;
   alertEl.style.display = "block";
@@ -53,11 +79,12 @@ function showAlert(message, type = "danger") {
 
 function hideAlert() {
   const alertEl = document.getElementById("auth-alert");
+  if (!alertEl) return;
   alertEl.style.display = "none";
   alertEl.innerText = "";
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault();
   clearAllErrors();
   hideAlert();
@@ -81,18 +108,30 @@ function handleLogin(event) {
 
   if (hasError) return;
 
-  showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
-  
-  // Giả lập lưu phiên đăng nhập
-  localStorage.setItem("is_logged_in", "true");
-  localStorage.setItem("user_email", email);
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
+  showAlert("Đang đăng nhập vào hệ thống...", "success");
 
-  setTimeout(() => {
-    window.location.href = "positions.html";
-  }, 1000);
+  try {
+    const res = await callAuthApi("/api/auth/login", { email, password });
+    localStorage.setItem("access_token", res.access_token);
+    localStorage.setItem("is_logged_in", "true");
+    localStorage.setItem("user_email", res.user.email);
+    localStorage.setItem("user_name", res.user.full_name);
+    localStorage.removeItem("current_session_id");
+
+    showAlert("Đăng nhập thành công! Đang chuyển hướng...", "success");
+    setTimeout(() => {
+      window.location.href = "positions.html";
+    }, 600);
+  } catch (err) {
+    showAlert(err.message || "Đăng nhập thất bại. Vui lòng kiểm tra lại.", "danger");
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+  }
 }
 
-function handleRegister(event) {
+async function handleRegister(event) {
   event.preventDefault();
   clearAllErrors();
   hideAlert();
@@ -137,10 +176,26 @@ function handleRegister(event) {
 
   if (hasError) return;
 
-  showAlert("Tạo tài khoản thành công! Đang chuyển sang màn hình đăng nhập...", "success");
-  setTimeout(() => {
-    document.getElementById("form-register").reset();
-    switchAuthMode("login");
-    document.getElementById("login-email").value = email;
-  }, 1200);
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = true;
+  showAlert("Đang tạo tài khoản...", "success");
+
+  try {
+    await callAuthApi("/api/auth/register", {
+      full_name: fullname,
+      email,
+      password,
+    });
+
+    showAlert("Tạo tài khoản thành công! Đang chuyển sang màn hình đăng nhập...", "success");
+    setTimeout(() => {
+      document.getElementById("form-register").reset();
+      switchAuthMode("login");
+      document.getElementById("login-email").value = email;
+    }, 900);
+  } catch (err) {
+    showAlert(err.message || "Đăng ký thất bại. Vui lòng thử lại.", "danger");
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+  }
 }

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Phòng phỏng vấn - AI Mock Interview</title>
-
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/interview.css">
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/interview.css" />
 </head>
 <body>
   <div class="layout-container">
@@ -29,20 +28,20 @@
           <span>🎯</span>
           <span>Vị trí &amp; Cấp độ</span>
         </a>
-        <a href="interview.html" class="menu-item active" aria-current="page">
+        <a href="interview.html" class="menu-item active">
           <span>💬</span>
           <span>Phòng phỏng vấn</span>
         </a>
-        <a href="#" class="menu-item" aria-disabled="true">
-          <span>📊</span>
-          <span>Lịch sử &amp; Kết quả</span>
+        <a href="index.html" class="menu-item" id="btn-logout">
+          <span>🚪</span>
+          <span>Đăng xuất</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
         <div class="user-info">
           <span class="user-status-dot" style="background-color: var(--success);"></span>
-          <span id="user-display">Chế độ luyện tập</span>
+          <span id="interview-user-status">Đang phỏng vấn</span>
         </div>
       </div>
     </aside>
@@ -50,110 +49,86 @@
     <div class="main-content">
       <header class="topbar">
         <div class="topbar-title">
-          <h1>Phòng phỏng vấn</h1>
-          <p>Luyện tập trả lời câu hỏi theo vị trí và cấp độ của bạn</p>
+          <h1>Phòng phỏng vấn cùng AI</h1>
+          <p id="session-badge-info">Đang kết nối phiên phỏng vấn...</p>
         </div>
-        <a class="interview-exit-link" href="positions.html">← Thiết lập buổi</a>
+        <div class="topbar-badge">
+          <span id="session-id-label" class="badge-tag">Phiên: --</span>
+        </div>
       </header>
 
       <main class="page-body">
         <div class="interview-wrapper">
-          <section class="session-heading" aria-label="Thông tin buổi phỏng vấn">
-            <div>
-              <span class="eyebrow">BUỔI LUYỆN TẬP CỦA BẠN</span>
-              <h2 id="session-title">Phỏng vấn thử</h2>
-              <p id="session-description">Chuẩn bị câu trả lời rõ ràng, súc tích và tự tin.</p>
-            </div>
-            <div class="session-status" id="session-status">
-              <span class="status-dot"></span>
-              <span>Sẵn sàng</span>
-            </div>
-          </section>
-
-          <div class="interview-grid" id="interview-content">
-            <section class="question-panel" aria-labelledby="question-title">
-              <div class="question-toolbar">
-                <span class="question-number" id="question-number">CÂU HỎI 01 / 05</span>
-                <span class="timer" id="timer" aria-label="Thời gian còn lại">30:00</span>
-              </div>
-
-              <div class="progress-track" role="progressbar" aria-label="Tiến độ câu hỏi" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1">
-                <span class="progress-fill" id="progress-fill"></span>
-              </div>
-
-              <div class="question-copy">
-                <span class="question-tag" id="question-tag">CÂU HỎI KHỞI ĐỘNG</span>
-                <h3 id="question-title"></h3>
-                <p id="question-hint">Hãy chia sẻ câu trả lời của bạn ở bên dưới.</p>
-              </div>
-
-              <label class="answer-label" for="answer-input">Câu trả lời của bạn</label>
-              <textarea id="answer-input" rows="8" placeholder="Nhập câu trả lời tại đây..."></textarea>
-              <div class="answer-meta">
-                <span id="word-count">0 từ</span>
-                <span>Câu trả lời chỉ được lưu trong phiên này.</span>
-              </div>
-
-              <div class="question-actions">
-                <button type="button" class="btn-secondary" id="btn-previous" disabled>← Câu trước</button>
-                <button type="button" class="btn-primary" id="btn-next">Bắt đầu trả lời <span aria-hidden="true">→</span></button>
-              </div>
-            </section>
-
-            <aside class="session-panel" aria-label="Tiến độ và gợi ý">
-              <div class="panel-card session-overview">
-                <div class="panel-title-row">
-                  <div class="panel-icon">✦</div>
-                  <div>
-                    <h3>Phiên phỏng vấn</h3>
-                    <p>Thông tin buổi luyện tập</p>
-                  </div>
-                </div>
-                <div class="session-detail">
-                  <span>Vị trí</span>
-                  <strong id="selected-position">Chưa thiết lập</strong>
-                </div>
-                <div class="session-detail">
-                  <span>Cấp độ</span>
-                  <strong id="selected-level">Chưa thiết lập</strong>
-                </div>
-                <div class="session-detail">
-                  <span>Tiến độ</span>
-                  <strong id="answered-count">0 / 5 câu đã trả lời</strong>
-                </div>
-                <a class="setup-link" href="positions.html">Thay đổi thiết lập <span aria-hidden="true">→</span></a>
-              </div>
-
-              <div class="panel-card tips-card">
-                <div class="tips-heading">
-                  <span aria-hidden="true">💡</span>
-                  <h3>Mẹo trả lời</h3>
-                </div>
-                <ul>
-                  <li>Nêu ý chính trước, sau đó giải thích ngắn gọn.</li>
-                  <li>Dùng ví dụ thực tế để làm rõ kinh nghiệm của bạn.</li>
-                  <li>Nếu chưa biết, hãy chia sẻ cách bạn sẽ tìm lời giải.</li>
-                </ul>
-              </div>
-
-              <button type="button" class="btn-end-session" id="btn-end-session">Kết thúc buổi phỏng vấn</button>
-            </aside>
+          <div id="status-banner" class="status-banner" role="alert">
+            <span id="status-banner-text"></span>
+            <button id="btn-retry" type="button" class="btn btn-retry" style="display: none;">
+              Thử lại
+            </button>
           </div>
 
-          <section class="completion-panel" id="completion-panel" hidden aria-live="polite">
-            <div class="completion-icon">✓</div>
-            <span class="eyebrow">BUỔI LUYỆN TẬP ĐÃ KẾT THÚC</span>
-            <h2>Bạn đã hoàn thành buổi phỏng vấn</h2>
-            <p id="completion-summary"></p>
-            <div class="completion-actions">
-              <a class="btn-primary" href="positions.html">Tạo buổi mới</a>
+          <div class="progress-card">
+            <div class="session-meta">
+              <div class="meta-badges">
+                <span class="badge badge-mint" id="meta-position">Vị trí: --</span>
+                <span class="badge" id="meta-level">Cấp độ: --</span>
+              </div>
+              <span class="badge badge-status" id="meta-status">Đang tải...</span>
             </div>
-          </section>
+
+            <div class="progress-info">
+              <div class="progress-track">
+                <div id="progress-fill" class="progress-fill"></div>
+              </div>
+              <span id="progress-text" class="word-count">0 / 5 câu đã gửi</span>
+            </div>
+
+            <div id="question-steps" class="question-steps"></div>
+          </div>
+
+          <div class="qa-card">
+            <div class="question-header">
+              <div class="question-top">
+                <span id="question-index-badge" class="badge badge-mint">Câu hỏi 1 / 5</span>
+                <span id="answer-state-badge" class="badge">Chưa gửi</span>
+              </div>
+              <h3 id="question-content" class="question-content">
+                Đang tải câu hỏi phỏng vấn từ AI...
+              </h3>
+            </div>
+
+            <div>
+              <label for="answer-input" class="answer-label">
+                Câu trả lời của bạn <span class="required">*</span>
+              </label>
+              <textarea
+                id="answer-input"
+                class="answer-textarea"
+                placeholder="Nhập câu trả lời chuyên môn của bạn tại đây..."
+                disabled
+              ></textarea>
+            </div>
+
+            <div class="answer-footer">
+              <span id="word-count" class="word-count">0 từ</span>
+              <div class="qa-actions">
+                <button id="btn-prev" type="button" class="btn btn-secondary" disabled>
+                  &larr; Câu trước
+                </button>
+                <button id="btn-submit-answer" type="button" class="btn btn-primary" disabled>
+                  Gửi câu trả lời
+                </button>
+                <button id="btn-next" type="button" class="btn btn-secondary" disabled>
+                  Câu tiếp &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
   </div>
 
+  <script src="js/api.js"></script>
   <script src="js/interview.js"></script>
 </body>
 </html>

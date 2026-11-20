@@ -1,20 +1,25 @@
-// Trạng thái lựa chọn
 let selectedPosition = "";
 let selectedLevel = "";
 
-// Cập nhật tên hiển thị nếu có
 document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const userName = localStorage.getItem("user_name");
   const email = localStorage.getItem("user_email");
-  if (email) {
-    const userDisplay = document.getElementById("user-display");
-    if (userDisplay) userDisplay.innerText = email.split("@")[0];
+  const userDisplay = document.getElementById("user-display");
+  if (userDisplay) {
+    userDisplay.innerText = userName || (email ? email.split("@")[0] : "Đã đăng nhập");
   }
 });
 
 // 1. CHỌN VỊ TRÍ
-document.querySelectorAll(".position-card").forEach(card => {
-  card.addEventListener("click", function() {
-    document.querySelectorAll(".position-card").forEach(item => item.classList.remove("selected"));
+document.querySelectorAll(".position-card").forEach((card) => {
+  card.addEventListener("click", function () {
+    document.querySelectorAll(".position-card").forEach((item) => item.classList.remove("selected"));
     this.classList.add("selected");
     selectedPosition = this.dataset.position;
 
@@ -25,9 +30,9 @@ document.querySelectorAll(".position-card").forEach(card => {
 });
 
 // 2. CHỌN CẤP ĐỘ
-document.querySelectorAll(".level-card").forEach(card => {
-  card.addEventListener("click", function() {
-    document.querySelectorAll(".level-card").forEach(item => item.classList.remove("selected"));
+document.querySelectorAll(".level-card").forEach((card) => {
+  card.addEventListener("click", function () {
+    document.querySelectorAll(".level-card").forEach((item) => item.classList.remove("selected"));
     this.classList.add("selected");
     selectedLevel = this.dataset.level;
 
@@ -37,11 +42,9 @@ document.querySelectorAll(".level-card").forEach(card => {
   });
 });
 
-// 3. XÁC NHẬN THIẾT LẬP
-document.getElementById("btn-continue").addEventListener("click", function() {
+// 3. XÁC NHẬN THIẾT LẬP VÀ SANG PHÒNG PHỎNG VẤN
+document.getElementById("btn-continue").addEventListener("click", function () {
   const message = document.getElementById("selection-message");
-  const startButton = document.getElementById("btn-start-interview");
-  startButton.hidden = true;
 
   if (!selectedPosition) {
     message.style.color = "var(--danger)";
@@ -55,11 +58,14 @@ document.getElementById("btn-continue").addEventListener("click", function() {
     return;
   }
 
-  // Lưu cấu hình vào localStorage
   localStorage.setItem("selected_position", selectedPosition);
   localStorage.setItem("selected_level", selectedLevel);
+  localStorage.removeItem("current_session_id");
 
   message.style.color = "var(--success)";
-  message.innerText = `Đã lưu: ${selectedPosition} (${selectedLevel}). Thiết lập hoàn tất!`;
-  startButton.hidden = false;
+  message.innerText = `Đã chọn: ${selectedPosition} (${selectedLevel}). Đang vào phòng phỏng vấn...`;
+
+  setTimeout(() => {
+    window.location.href = "interview.html";
+  }, 500);
 });

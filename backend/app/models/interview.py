@@ -1,5 +1,15 @@
 from datetime import datetime
-from sqlalchemy import BigInteger, Column, DateTime, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    BigInteger,
+    Column,
+    DateTime,
+    Enum,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from app.models.auth import Base
 
 
@@ -29,7 +39,46 @@ class InterviewSession(Base):
     status = Column(
         Enum("CREATED", "IN_PROGRESS", "COMPLETED", "EVALUATED", name="session_status"),
         nullable=False,
-        default="CREATED"
+        default="CREATED",
     )
     started_at = Column(DateTime, default=datetime.utcnow)
     completed_at = Column(DateTime, nullable=True)
+
+
+class InterviewQuestion(Base):
+    __tablename__ = "interview_questions"
+    __table_args__ = (
+        UniqueConstraint("session_id", "question_order", name="uq_session_question_order"),
+    )
+
+    question_id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
+    session_id = Column(
+        BigInteger,
+        ForeignKey("interview_sessions.session_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    question_order = Column(Integer, nullable=False)
+    question_content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class InterviewAnswer(Base):
+    __tablename__ = "interview_answers"
+
+    answer_id = Column(BigInteger, primary_key=True, index=True, autoincrement=True)
+    session_id = Column(
+        BigInteger,
+        ForeignKey("interview_sessions.session_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    question_id = Column(
+        BigInteger,
+        ForeignKey("interview_questions.question_id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    answer_content = Column(Text, nullable=False)
+    submitted_at = Column(DateTime, default=datetime.utcnow)
