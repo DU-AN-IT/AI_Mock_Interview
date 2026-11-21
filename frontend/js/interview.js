@@ -28,6 +28,9 @@ const els = {
   answerStateBadge: document.getElementById("answer-state-badge"),
   questionContent: document.getElementById("question-content"),
   answerInput: document.getElementById("answer-input"),
+  evaluation: document.getElementById("answer-evaluation"),
+  evaluationScore: document.getElementById("answer-score"),
+  evaluationFeedback: document.getElementById("answer-feedback"),
   wordCount: document.getElementById("word-count"),
   btnPrev: document.getElementById("btn-prev"),
   btnSubmit: document.getElementById("btn-submit-answer"),
@@ -132,6 +135,11 @@ function renderCurrentQuestion() {
   els.metaLevel.textContent = `Cấp độ: ${state.levelName}`;
   els.questionIndexBadge.textContent = `Câu hỏi ${q.question_order} / ${total}`;
   els.questionContent.textContent = q.question_content;
+  els.evaluation.hidden = q.score === null || q.score === undefined;
+  if (!els.evaluation.hidden) {
+    els.evaluationScore.textContent = Number(q.score).toFixed(1);
+    els.evaluationFeedback.textContent = q.feedback || "";
+  }
 
   if (q.answered) {
     els.answerStateBadge.textContent = "Đã lưu lên hệ thống";
@@ -210,13 +218,16 @@ async function initInterviewSession() {
       if (!res.data.questions || res.data.questions.length < 5) {
         const gen = await apiRequest(`/api/interviews/${savedSessionId}/questions/generate`, {
           method: "POST",
+          timeout: 125000,
         });
         res.data.questions = gen.questions;
         res.data.status = gen.status;
+        res.data.ai_source = gen.ai_source;
       }
     } else {
       res = await apiRequest("/api/interviews", {
         method: "POST",
+        timeout: 125000,
         body: {
           position: selectedPosition,
           level: selectedLevel,
@@ -224,8 +235,15 @@ async function initInterviewSession() {
       });
     }
 
-    hideBanner();
     applySessionData(res.data);
+    if (res.data.ai_source === "fallback") {
+      showBanner(
+        "error",
+        "Gemini chưa phản hồi được; phiên này đang dùng câu hỏi dự phòng."
+      );
+    } else {
+      hideBanner();
+    }
   } catch (err) {
     if (err.status === 401) {
       showBanner("error", "Phiên đăng nhập đã hết hạn. Đang chuyển về trang đăng nhập...");
@@ -266,6 +284,7 @@ async function handleSubmitAnswer() {
   try {
     const res = await apiRequest(`/api/interviews/${state.sessionId}/answers`, {
       method: "POST",
+      timeout: 100000,
       body: {
         question_id: q.question_id,
         answer_content: content,
@@ -274,20 +293,21 @@ async function handleSubmitAnswer() {
 
     q.answered = true;
     q.answer_content = res.data.answer_content;
+    q.score = res.data.score;
+    q.feedback = res.data.feedback;
     delete state.drafts[q.question_id];
     state.sessionStatus = res.data.session_status;
 
     if (state.sessionStatus === "COMPLETED") {
       showBanner(
         "success",
-        "Bạn đã gửi đủ 5/5 câu trả lời! Phiên phỏng vấn đã hoàn tất (COMPLETED)."
+        "Bạn đã gửi đủ 5/5 câu trả lời và hoàn tất đánh giá cho phiên phỏng vấn."
       );
     } else {
-      showBanner("success", `Đã lưu câu trả lời câu ${q.question_order} thành công.`);
-      const nextUnanswered = state.questions.findIndex((item) => !item.answered);
-      if (nextUnanswered >= 0) {
-        state.currentIndex = nextUnanswered;
-      }
+      showBanner(
+        "success",
+        `Đã lưu và đánh giá câu trả lời câu ${q.question_order}. Xem nhận xét bên dưới trước khi tiếp tục.`
+      );
     }
   } catch (err) {
     if (err.status === 401) {

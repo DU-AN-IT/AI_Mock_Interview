@@ -23,7 +23,11 @@ from app.schemas.interview import (
     SubmitAnswerRequest,
     SubmitAnswerResponse,
 )
-from app.services.gemini import generate_interview_questions
+from app.services.gemini import (
+    GeminiEvaluationError,
+    evaluate_interview_answer,
+    generate_interview_questions,
+)
 
 
 def _get_owned_session(db: Session, current_user: User, session_id: int) -> InterviewSession:
@@ -57,14 +61,24 @@ def _build_question_items(db: Session, session_id: int) -> List[QuestionItemResp
         .filter(InterviewAnswer.session_id == session_id)
         .all()
     )
-    answer_map: Dict[int, str] = {a.question_id: a.answer_content for a in answers}
+    answer_map: Dict[int, InterviewAnswer] = {a.question_id: a for a in answers}
 
     return [
         QuestionItemResponse(
             question_id=q.question_id,
             question_order=q.question_order,
             question_content=q.question_content,
-            answer_content=answer_map.get(q.question_id),
+            answer_content=(
+                answer_map[q.question_id].answer_content
+                if q.question_id in answer_map
+                else None
+            ),
+            score=answer_map[q.question_id].score if q.question_id in answer_map else None,
+            feedback=(
+                answer_map[q.question_id].feedback
+                if q.question_id in answer_map
+                else None
+            ),
             answered=q.question_id in answer_map,
         )
         for q in questions
@@ -300,10 +314,44 @@ def submit_interview_answer(
             detail="Câu hỏi này đã được nộp câu trả lời trước đó.",
         )
 
+    position_obj = (
+        db.query(JobPosition)
+        .filter(JobPosition.position_id == session.position_id)
+        .first()
+    )
+    level_obj = (
+        db.query(InterviewLevel)
+        .filter(InterviewLevel.level_id == session.level_id)
+        .first()
+    )
+    if not position_obj or not level_obj:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Không thể tải tiêu chí đánh giá cho phiên phỏng vấn này.",
+        )
+
+    try:
+        score, feedback = evaluate_interview_answer(
+            question=question.question_content,
+            answer=cleaned_answer,
+            position_name=position_obj.position_name,
+            level_name=level_obj.level_name,
+        )
+    except GeminiEvaluationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=(
+                "Không thể đánh giá câu trả lời với Gemini. Câu trả lời chưa được lưu; "
+                "vui lòng thử lại."
+            ),
+        ) from exc
+
     new_answer = InterviewAnswer(
         session_id=session.session_id,
         question_id=question.question_id,
         answer_content=cleaned_answer,
+        score=score,
+        feedback=feedback,
     )
     try:
         db.add(new_answer)
@@ -342,6 +390,8 @@ def submit_interview_answer(
             session_id=session.session_id,
             question_id=question.question_id,
             answer_content=new_answer.answer_content,
+            score=new_answer.score,
+            feedback=new_answer.feedback,
             submitted_at=new_answer.submitted_at,
             answered_count=answered_count,
             total_questions=total_questions,
