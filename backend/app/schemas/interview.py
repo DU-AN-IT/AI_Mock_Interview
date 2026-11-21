@@ -49,7 +49,12 @@ class GenerateQuestionsResponse(BaseModel):
 
 class SubmitAnswerRequest(BaseModel):
     question_id: int = Field(..., gt=0, description="Mã câu hỏi thuộc phiên phỏng vấn")
-    answer_content: str = Field(..., min_length=1, description="Nội dung câu trả lời của ứng viên")
+    answer_content: str = Field(
+        ...,
+        min_length=1,
+        max_length=10000,
+        description="Nội dung câu trả lời của ứng viên",
+    )
 
 
 class AnswerDataResponse(BaseModel):

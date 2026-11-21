@@ -33,6 +33,10 @@ const els = {
   btnSubmit: document.getElementById("btn-submit-answer"),
   btnNext: document.getElementById("btn-next"),
   btnLogout: document.getElementById("btn-logout"),
+  emptyQuestionState: document.getElementById("empty-question-state"),
+  btnEmptyRetry: document.getElementById("btn-empty-retry"),
+  progressCard: document.querySelector(".progress-card"),
+  qaCard: document.querySelector(".qa-card"),
 };
 
 function showBanner(type, message, showRetry = false) {
@@ -110,7 +114,16 @@ function saveCurrentDraft() {
 
 function renderCurrentQuestion() {
   const total = state.questions.length;
-  if (!total) return;
+  if (!total) {
+    els.progressCard.hidden = true;
+    els.qaCard.hidden = true;
+    els.emptyQuestionState.hidden = false;
+    return;
+  }
+
+  els.progressCard.hidden = false;
+  els.qaCard.hidden = false;
+  els.emptyQuestionState.hidden = true;
 
   const q = state.questions[state.currentIndex];
   els.sessionIdLabel.textContent = `Phiên #${state.sessionId}`;
@@ -337,6 +350,10 @@ els.btnRetry.addEventListener("click", () => {
     state.lastFailedAction();
   }
 });
+
+if (els.btnEmptyRetry) {
+  els.btnEmptyRetry.addEventListener("click", initInterviewSession);
+}
 
 if (els.btnLogout) {
   els.btnLogout.addEventListener("click", () => {
