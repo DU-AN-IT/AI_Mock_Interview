@@ -28,8 +28,10 @@ SECRET_KEY=thay_bang_chuoi_bi_mat_dai_va_ngau_nhien_it_nhat_32_ky_tu
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 GEMINI_API_KEY=dan_gemini_api_key_cua_ban_o_day
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
+
+Gemini ưu tiên model `gemini-3.5-flash-lite`; nếu model này lỗi, hệ thống thử tiếp `gemini-3.8-flash`.
 
 Không gửi hoặc commit file `.env` vì trong đó có API key và thông tin kết nối.
 
@@ -47,7 +49,8 @@ Nếu Live Server chạy ở cổng khác `5500` hoặc `5501`, thêm địa ch�
 - Đăng ký và đăng nhập bằng JWT.
 - Tạo phiên phỏng vấn theo vị trí và cấp độ.
 - Gemini tạo đúng 5 câu hỏi và lưu vào MySQL.
-- Gửi câu trả lời lên Backend, lưu hoặc cập nhật theo từng câu hỏi.
+- Gửi câu trả lời cùng rubric (độ chính xác, đầy đủ, mạch lạc, lập luận/ví dụ) đến Gemini; lưu điểm 0-10 và nhận xét cho từng câu.
+- Hiển thị điểm và nhận xét ngay sau khi chấm, đồng thời tải lại cùng thông tin khi mở lại phiên.
 - Có trạng thái đang gửi và thông báo lỗi; nội dung câu trả lời vẫn còn trên giao diện khi gửi lỗi.
 - Kiểm tra câu trả lời tối thiểu 1 ký tự sau khi loại bỏ khoảng trắng, tối đa 10.000 ký tự.
 - Gửi trùng câu hỏi sẽ nhận HTTP `409 Conflict` thay vì ghi đè dữ liệu.
@@ -65,3 +68,11 @@ Khi Backend khởi động thành công, SQLAlchemy tự tạo các bảng:
 - `interview_answers`
 
 Các vị trí và cấp độ mẫu được tự động thêm nếu bảng tương ứng đang trống.
+
+Nếu đã có bảng `interview_answers` từ phiên bản trước, chạy lệnh sau một lần trước khi khởi động backend:
+
+```sql
+ALTER TABLE interview_answers
+ADD COLUMN score FLOAT NULL,
+ADD COLUMN feedback TEXT NULL;
+```

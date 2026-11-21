@@ -175,6 +175,28 @@
   gap: 12px;
 }
 
+.answer-evaluation {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #99f6e4;
+  border-radius: 10px;
+  background: #f0fdfa;
+  color: #134e4a;
+  line-height: 1.6;
+}
+
+.answer-evaluation[hidden] {
+  display: none;
+}
+
+.answer-evaluation h4 {
+  margin-bottom: 8px;
+}
+
+.answer-evaluation p + p {
+  margin-top: 6px;
+}
+
 .word-count {
   font-size: 13px;
   color: var(--text-muted, #64748b);

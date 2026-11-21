@@ -15,6 +15,8 @@ class QuestionItemResponse(BaseModel):
     question_order: int
     question_content: str
     answer_content: Optional[str] = None
+    score: Optional[float] = None
+    feedback: Optional[str] = None
     answered: bool = False
 
 
@@ -62,6 +64,8 @@ class AnswerDataResponse(BaseModel):
     session_id: int
     question_id: int
     answer_content: str
+    score: float
+    feedback: str
     submitted_at: datetime
     answered_count: int
     total_questions: int

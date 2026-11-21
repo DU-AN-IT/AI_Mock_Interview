@@ -1,6 +1,6 @@
 # AI Mock Interview - Backend + Frontend
 
-Dự án gồm FastAPI, MySQL, HTML/CSS/JavaScript và Gemini API. Phiên bản này hỗ trợ đăng ký/đăng nhập, tạo phiên phỏng vấn, Gemini sinh đúng 5 câu hỏi, lưu câu trả lời và đánh dấu phiên đã hoàn thành.
+Dự án gồm FastAPI, MySQL, HTML/CSS/JavaScript và Gemini API. Phiên bản này hỗ trợ đăng ký/đăng nhập, tạo phiên phỏng vấn, Gemini sinh đúng 5 câu hỏi, đánh giá từng câu trả lời theo rubric, lưu điểm/nhận xét và đánh dấu phiên đã hoàn thành.
 
 ## 1. Chuẩn bị MySQL (XAMPP)
 
@@ -34,8 +34,10 @@ SECRET_KEY=thay_bang_chuoi_bi_mat_dai_va_ngau_nhien
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 GEMINI_API_KEY=API_KEY_GEMINI_CUA_BAN
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
+
+Gemini ưu tiên model `gemini-3.5-flash-lite`; nếu model này lỗi, hệ thống thử tiếp `gemini-3.8-flash`.
 
 Chạy Backend (vẫn ở thư mục `backend`):
 
@@ -62,13 +64,22 @@ Mở thư mục `frontend` bằng VS Code, dùng Live Server mở `index.html`. 
 
 Khi Backend khởi động và kết nối được MySQL, SQLAlchemy tạo các bảng `users`, `job_positions`, `interview_levels`, `interview_sessions`, `interview_questions`, `interview_answers`. Dữ liệu vị trí và cấp độ mẫu được thêm nếu bảng tương ứng đang trống.
 
+Nếu đã có bảng `interview_answers` từ phiên bản trước, chạy lệnh sau một lần để bổ sung cột điểm và nhận xét:
+
+```sql
+ALTER TABLE interview_answers
+ADD COLUMN score FLOAT NULL,
+ADD COLUMN feedback TEXT NULL;
+```
+
 ## 6. API chính
 
 - `POST /api/auth/register` - đăng ký.
 - `POST /api/auth/login` - đăng nhập.
 - `POST /api/interviews` - tạo phiên phỏng vấn (cần Bearer token).
 - `POST /api/interviews/{session_id}/questions/generate` - Gemini tạo/lấy 5 câu hỏi (cần Bearer token).
-- `POST /api/interviews/{session_id}/answers` - lưu hoặc cập nhật câu trả lời (cần Bearer token).
+- `POST /api/interviews/{session_id}/answers` - gửi câu trả lời và rubric đến Gemini, lưu câu trả lời cùng điểm (0-10)/nhận xét (cần Bearer token). Nếu Gemini lỗi, API trả `503` và không lưu câu trả lời.
+- `GET /api/interviews/{session_id}` - lấy câu hỏi, câu trả lời, điểm và nhận xét từng câu (cần Bearer token).
 - `POST /api/interviews/{session_id}/complete` - kết thúc phiên (cần Bearer token).
 
 Không đưa file `.env`, mật khẩu hoặc API key lên GitHub.
