@@ -4,6 +4,7 @@ from sqlalchemy import (
     Column,
     DateTime,
     Enum,
+    Float,
     ForeignKey,
     Integer,
     String,
@@ -81,4 +82,6 @@ class InterviewAnswer(Base):
         index=True,
     )
     answer_content = Column(Text, nullable=False)
+    score = Column(Float, nullable=True)
+    feedback = Column(Text, nullable=True)
     submitted_at = Column(DateTime, default=datetime.utcnow)
