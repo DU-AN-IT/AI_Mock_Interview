@@ -12,7 +12,7 @@ from app.models.interview import (
     InterviewSession,
     JobPosition,
 )
-from app.routers import auth, interview
+from app.routers import auth, interview, results_history
 
 Base.metadata.create_all(bind=engine)
 
@@ -74,3 +74,4 @@ def db_health_check():
 
 app.include_router(auth.router)
 app.include_router(interview.router)
+app.include_router(results_history.router)
