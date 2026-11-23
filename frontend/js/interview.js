@@ -31,6 +31,9 @@ const els = {
   evaluation: document.getElementById("answer-evaluation"),
   evaluationScore: document.getElementById("answer-score"),
   evaluationFeedback: document.getElementById("answer-feedback"),
+  btnToggleModelAnswer: document.getElementById("btn-toggle-model-answer"),
+  modelAnswerContainer: document.getElementById("model-answer-container"),
+  modelAnswerText: document.getElementById("model-answer-text"),
   wordCount: document.getElementById("word-count"),
   btnPrev: document.getElementById("btn-prev"),
   btnSubmit: document.getElementById("btn-submit-answer"),
@@ -40,6 +43,8 @@ const els = {
   btnEmptyRetry: document.getElementById("btn-empty-retry"),
   progressCard: document.querySelector(".progress-card"),
   qaCard: document.querySelector(".qa-card"),
+  completedBanner: document.getElementById("session-completed-banner"),
+  btnViewResults: document.getElementById("btn-view-results"),
 };
 
 function showBanner(type, message, showRetry = false) {
@@ -139,6 +144,18 @@ function renderCurrentQuestion() {
   if (!els.evaluation.hidden) {
     els.evaluationScore.textContent = Number(q.score).toFixed(1);
     els.evaluationFeedback.textContent = q.feedback || "";
+
+    if (els.btnToggleModelAnswer && els.modelAnswerContainer && els.modelAnswerText) {
+      if (q.model_answer) {
+        els.btnToggleModelAnswer.style.display = "inline-flex";
+        els.modelAnswerText.textContent = q.model_answer;
+        els.modelAnswerContainer.hidden = true;
+        els.btnToggleModelAnswer.textContent = "💡 Xem câu trả lời chuẩn từ chuyên gia";
+      } else {
+        els.btnToggleModelAnswer.style.display = "none";
+        els.modelAnswerContainer.hidden = true;
+      }
+    }
   }
 
   if (q.answered) {
@@ -166,6 +183,15 @@ function renderCurrentQuestion() {
   renderStatusBadge();
   renderProgress();
   renderQuestionSteps();
+
+  // Hiển thị banner hoàn thành nếu tất cả câu hỏi đã được trả lời
+  if (els.completedBanner) {
+    const isCompleted = state.sessionStatus === "COMPLETED" || (total > 0 && state.questions.every((item) => item.answered));
+    els.completedBanner.hidden = !isCompleted;
+    if (isCompleted && els.btnViewResults) {
+      els.btnViewResults.href = `results.html?id=${state.sessionId}`;
+    }
+  }
 }
 
 function applySessionData(sessionData, keepCurrentIndex = false) {
@@ -274,9 +300,12 @@ async function handleSubmitAnswer() {
     els.answerInput.focus();
     return;
   }
+  if (content.length > 10000) {
+    showBanner("error", "Câu trả lời quá dài (tối đa 10.000 ký tự).");
+    return;
+  }
 
   state.isSubmitting = true;
-  state.lastFailedAction = handleSubmitAnswer;
   state.drafts[q.question_id] = content;
   renderCurrentQuestion();
   showBanner("loading", `Đang gửi câu trả lời cho câu hỏi ${q.question_order}...`, false);
@@ -295,6 +324,8 @@ async function handleSubmitAnswer() {
     q.answer_content = res.data.answer_content;
     q.score = res.data.score;
     q.feedback = res.data.feedback;
+    q.model_answer = res.data.model_answer;
+    q.criteria_scores = res.data.criteria_scores;
     delete state.drafts[q.question_id];
     state.sessionStatus = res.data.session_status;
 
@@ -370,6 +401,17 @@ els.btnRetry.addEventListener("click", () => {
     state.lastFailedAction();
   }
 });
+
+if (els.btnToggleModelAnswer) {
+  els.btnToggleModelAnswer.addEventListener("click", () => {
+    if (els.modelAnswerContainer) {
+      els.modelAnswerContainer.hidden = !els.modelAnswerContainer.hidden;
+      els.btnToggleModelAnswer.textContent = els.modelAnswerContainer.hidden
+        ? "💡 Xem câu trả lời chuẩn từ chuyên gia"
+        : "Ẩn câu trả lời chuẩn";
+    }
+  });
+}
 
 if (els.btnEmptyRetry) {
   els.btnEmptyRetry.addEventListener("click", initInterviewSession);

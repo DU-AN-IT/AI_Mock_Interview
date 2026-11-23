@@ -4,7 +4,7 @@ Dự án gồm FastAPI, MySQL, HTML/CSS/JavaScript và Gemini API. Phiên bản 
 
 ## 1. Chuẩn bị MySQL (XAMPP)
 
-Bật MySQL trong XAMPP. Dự án đang cấu hình cổng `3307`, tài khoản `root`, mật khẩu trống theo thiết lập hiện tại của bạn. Trong phpMyAdmin, mở tab SQL và chạy:
+Bật MySQL trong XAMPP. Dự án đang cấu hình cổng `3306`, tài khoản `root`, mật khẩu trống theo thiết lập hiện tại của bạn. Trong phpMyAdmin, mở tab SQL và chạy:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS ai_mock_interview_gemini
@@ -29,7 +29,7 @@ Copy-Item .env.example .env
 Mở `backend/.env`, kiểm tra các dòng sau và thay Gemini API key bằng key của bạn (không chia sẻ key):
 
 ```env
-DATABASE_URL=mysql+pymysql://root:@127.0.0.1:3307/ai_mock_interview_gemini?charset=utf8mb4
+DATABASE_URL=mysql+pymysql://root:@127.0.0.1:3306/ai_mock_interview_gemini?charset=utf8mb4
 SECRET_KEY=thay_bang_chuoi_bi_mat_dai_va_ngau_nhien
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60

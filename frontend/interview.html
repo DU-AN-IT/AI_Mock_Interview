@@ -32,6 +32,10 @@
           <span>💬</span>
           <span>Phòng phỏng vấn</span>
         </a>
+        <a href="history.html" class="menu-item">
+          <span>📊</span>
+          <span>Lịch sử &amp; Kết quả</span>
+        </a>
         <a href="index.html" class="menu-item" id="btn-logout">
           <span>🚪</span>
           <span>Đăng xuất</span>
@@ -59,44 +63,46 @@
 
       <main class="page-body">
         <div class="interview-wrapper">
-          <div id="status-banner" class="status-banner" role="alert">
-            <span id="status-banner-text"></span>
-            <button id="btn-retry" type="button" class="btn btn-retry" style="display: none;">
+          <div id="status-banner" class="status-banner" role="status">
+            <span id="status-banner-text">Đang kết nối...</span>
+            <button id="btn-retry" type="button" class="btn btn-secondary" style="display:none;">
               Thử lại
             </button>
           </div>
 
           <div class="progress-card">
-            <div class="session-meta">
-              <div class="meta-badges">
-                <span class="badge badge-mint" id="meta-position">Vị trí: --</span>
-                <span class="badge" id="meta-level">Cấp độ: --</span>
+            <div class="meta-row">
+              <div class="meta-left">
+                <span id="meta-position" class="badge badge-position">--</span>
+                <span id="meta-level" class="badge badge-level">--</span>
+                <span id="meta-status" class="badge badge-status">--</span>
               </div>
-              <span class="badge badge-status" id="meta-status">Đang tải...</span>
-            </div>
-
-            <div class="progress-info">
-              <div class="progress-track">
-                <div id="progress-fill" class="progress-fill"></div>
+              <div class="meta-right">
+                <span id="progress-text" class="progress-label">0 / 5 câu</span>
               </div>
-              <span id="progress-text" class="word-count">0 / 5 câu đã gửi</span>
             </div>
-
-            <div id="question-steps" class="question-steps"></div>
+            <div class="progress-bar-bg" aria-hidden="true">
+              <div id="progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
           </div>
 
+          <div class="question-nav" id="question-steps" aria-label="Danh sách câu hỏi"></div>
+
           <div class="qa-card">
-            <div class="question-header">
-              <div class="question-top">
-                <span id="question-index-badge" class="badge badge-mint">Câu hỏi 1 / 5</span>
+            <div class="qa-header">
+              <div class="qa-badge-group">
+                <span id="question-index-badge" class="badge-number">Câu --</span>
                 <span id="answer-state-badge" class="badge">Chưa gửi</span>
               </div>
-              <h3 id="question-content" class="question-content">
-                Đang tải câu hỏi phỏng vấn từ AI...
-              </h3>
             </div>
 
-            <div>
+            <div class="question-box">
+              <p id="question-content" class="question-text">
+                Đang tải nội dung câu hỏi từ hệ thống AI...
+              </p>
+            </div>
+
+            <div class="answer-box">
               <label for="answer-input" class="answer-label">
                 Câu trả lời của bạn <span class="required">*</span>
               </label>
@@ -127,7 +133,25 @@
               <h4>Đánh giá câu trả lời</h4>
               <p><strong>Điểm:</strong> <span id="answer-score"></span> / 10</p>
               <p id="answer-feedback"></p>
+
+              <!-- Nút & hộp xem câu trả lời mẫu từ chuyên gia -->
+              <button id="btn-toggle-model-answer" type="button" class="btn btn-secondary" style="margin-top: 12px; font-size: 13px; display: none;">
+                💡 Xem câu trả lời chuẩn từ chuyên gia
+              </button>
+              <div id="model-answer-container" hidden style="margin-top: 12px; padding: 14px; background: #ffffff; border: 1px dashed var(--primary); border-radius: 6px;">
+                <strong style="color: var(--primary); display: block; margin-bottom: 6px;">💡 Gợi ý câu trả lời từ chuyên gia:</strong>
+                <p id="model-answer-text" style="font-size: 13.5px; line-height: 1.6; color: #1e293b; white-space: pre-wrap; margin: 0;"></p>
+              </div>
             </section>
+
+            <!-- Card thông báo hoàn thành phiên và nút dẫn sang kết quả -->
+            <div id="session-completed-banner" class="session-completed-card" hidden style="margin-top: 20px; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; text-align: center;">
+              <h3 style="color: #166534; margin-bottom: 8px;">🎉 Chúc mừng bạn đã hoàn thành phiên phỏng vấn!</h3>
+              <p style="color: #15803d; margin-bottom: 16px;">Tất cả 5/5 câu hỏi đã được gửi và đánh giá bởi AI. Bạn có thể xem báo cáo kết quả chi tiết ngay bây giờ.</p>
+              <a id="btn-view-results" href="results.html" class="btn btn-primary" style="display: inline-block; text-decoration: none; padding: 10px 24px; font-weight: 600;">
+                📊 Xem báo cáo kết quả chi tiết &rarr;
+              </a>
+            </div>
 
             <div id="empty-question-state" class="empty-state" hidden>
               <div class="empty-state-icon" aria-hidden="true">?</div>
