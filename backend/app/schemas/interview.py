@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -17,6 +17,8 @@ class QuestionItemResponse(BaseModel):
     answer_content: Optional[str] = None
     score: Optional[float] = None
     feedback: Optional[str] = None
+    model_answer: Optional[str] = None
+    criteria_scores: Optional[Dict[str, float]] = None
     answered: bool = False
 
 
@@ -66,6 +68,8 @@ class AnswerDataResponse(BaseModel):
     answer_content: str
     score: float
     feedback: str
+    model_answer: Optional[str] = None
+    criteria_scores: Optional[Dict[str, float]] = None
     submitted_at: datetime
     answered_count: int
     total_questions: int

@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Dict, List
 
@@ -63,6 +64,14 @@ def _build_question_items(db: Session, session_id: int) -> List[QuestionItemResp
     )
     answer_map: Dict[int, InterviewAnswer] = {a.question_id: a for a in answers}
 
+    def _parse_criteria(raw):
+        if not raw:
+            return None
+        try:
+            return json.loads(raw)
+        except Exception:
+            return None
+
     return [
         QuestionItemResponse(
             question_id=q.question_id,
@@ -76,6 +85,16 @@ def _build_question_items(db: Session, session_id: int) -> List[QuestionItemResp
             score=answer_map[q.question_id].score if q.question_id in answer_map else None,
             feedback=(
                 answer_map[q.question_id].feedback
+                if q.question_id in answer_map
+                else None
+            ),
+            model_answer=(
+                answer_map[q.question_id].model_answer
+                if q.question_id in answer_map
+                else None
+            ),
+            criteria_scores=(
+                _parse_criteria(answer_map[q.question_id].criteria_scores)
                 if q.question_id in answer_map
                 else None
             ),
@@ -331,7 +350,7 @@ def submit_interview_answer(
         )
 
     try:
-        score, feedback = evaluate_interview_answer(
+        score, feedback, model_answer, criteria_scores = evaluate_interview_answer(
             question=question.question_content,
             answer=cleaned_answer,
             position_name=position_obj.position_name,
@@ -352,6 +371,8 @@ def submit_interview_answer(
         answer_content=cleaned_answer,
         score=score,
         feedback=feedback,
+        model_answer=model_answer,
+        criteria_scores=json.dumps(criteria_scores, ensure_ascii=False) if criteria_scores else None,
     )
     try:
         db.add(new_answer)
@@ -392,6 +413,8 @@ def submit_interview_answer(
             answer_content=new_answer.answer_content,
             score=new_answer.score,
             feedback=new_answer.feedback,
+            model_answer=new_answer.model_answer,
+            criteria_scores=criteria_scores,
             submitted_at=new_answer.submitted_at,
             answered_count=answered_count,
             total_questions=total_questions,

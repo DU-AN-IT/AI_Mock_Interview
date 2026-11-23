@@ -73,5 +73,5 @@ def db_health_check():
 
 
 app.include_router(auth.router)
-app.include_router(interview.router)
 app.include_router(results_history.router)
+app.include_router(interview.router)

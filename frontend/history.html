@@ -51,7 +51,7 @@
             </button>
 
             <div class="submenu" id="history-submenu" hidden>
-              <a href="history.html" class="submenu-item">
+              <a href="history.html" class="submenu-item active">
                 Lịch sử phỏng vấn
               </a>
 
@@ -64,8 +64,8 @@
 
         <div class="sidebar-footer">
           <div class="user-info">
-            <span class="user-status-dot"></span>
-            <span id="sidebar-username">test</span>
+            <span class="user-status-dot" style="background-color: var(--success);"></span>
+            <span id="sidebar-username">Ứng viên</span>
           </div>
         </div>
       </aside>
@@ -76,7 +76,7 @@
             <h1>Lịch sử phỏng vấn</h1>
             <p>Xem lại các phiên phỏng vấn đã thực hiện</p>
           </div>
-          <span class="badge-tag">Frontend Pure JS</span>
+          <span class="badge-tag">Hệ thống AI Mock Interview</span>
         </header>
 
         <div class="page-body">
@@ -120,6 +120,7 @@
                       <th>Ngày thực hiện</th>
                       <th>Vị trí</th>
                       <th>Cấp độ</th>
+                      <th>Trạng thái</th>
                       <th>Điểm tổng</th>
                       <th>Thao tác</th>
                     </tr>
@@ -144,6 +145,7 @@
       </div>
     </div>
 
+    <script src="js/api.js"></script>
     <script src="js/mock-data.js"></script>
     <script src="js/history.js"></script>
     <script src="js/sidebar.js"></script>

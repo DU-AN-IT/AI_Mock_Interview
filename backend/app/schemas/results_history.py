@@ -1,6 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
-
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -18,9 +17,7 @@ class HistoryItem(BaseModel):
 # Response danh sách lịch sử
 class HistoryResponse(BaseModel):
     success: bool = True
-    data: List[HistoryItem] = Field(
-        default_factory=list
-    )
+    data: List[HistoryItem] = Field(default_factory=list)
 
 
 # Chi tiết câu hỏi và câu trả lời
@@ -32,6 +29,8 @@ class AnswerDetail(BaseModel):
     submitted_at: Optional[datetime] = None
     score: Optional[float] = None
     feedback: Optional[str] = None
+    model_answer: Optional[str] = None
+    criteria_scores: Optional[Dict[str, float]] = None
 
 
 # Thông tin kết quả chi tiết
@@ -47,17 +46,11 @@ class ResultData(BaseModel):
     score: Optional[float] = None
     feedback: Optional[str] = None
 
-    strengths: List[str] = Field(
-        default_factory=list
-    )
+    radar_data: Optional[Dict[str, float]] = None
 
-    weaknesses: List[str] = Field(
-        default_factory=list
-    )
-
-    questions: List[AnswerDetail] = Field(
-        default_factory=list
-    )
+    strengths: List[str] = Field(default_factory=list)
+    weaknesses: List[str] = Field(default_factory=list)
+    questions: List[AnswerDetail] = Field(default_factory=list)
 
 
 # Response kết quả chi tiết

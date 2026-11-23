@@ -84,4 +84,6 @@ class InterviewAnswer(Base):
     answer_content = Column(Text, nullable=False)
     score = Column(Float, nullable=True)
     feedback = Column(Text, nullable=True)
+    model_answer = Column(Text, nullable=True)
+    criteria_scores = Column(Text, nullable=True)
     submitted_at = Column(DateTime, default=datetime.utcnow)
