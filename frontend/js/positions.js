@@ -4,7 +4,7 @@ let selectedLevel = "";
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    window.location.href = "index.html";
+    window.location.href = "auth.html";
     return;
   }
 

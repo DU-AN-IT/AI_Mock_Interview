@@ -3,136 +3,405 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Mock Interview - Xác thực tài khoản</title>
-  
+  <title>AI Mock Interview - Hệ thống phỏng vấn thử cùng Gemini AI</title>
+  <meta name="description" content="Nền tảng phỏng vấn thử chuyên môn tương tác 1:1 cùng Google Gemini AI. Tự động sinh câu hỏi thực tế, chấm điểm Rubric đa chiều và nhận xét tức thì.">
+
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
 
-  <div class="layout-container">
-    
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-logo">AI</div>
-        <div class="brand-text">
-          <h2>MockInterview</h2>
-          <span>HỆ THỐNG LUYỆN TẬP</span>
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header class="landing-header" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-link">
+        <div class="brand-badge">AI</div>
+        <div class="brand-info">
+          <span class="brand-title">MockInterview</span>
+          <span class="brand-tag">GEMINI AI PLATFORM</span>
         </div>
-      </div>
+      </a>
 
-      <nav class="sidebar-menu">
-        <a href="index.html" class="menu-item active">
-          <span>🔐</span>
-          <span>Tài khoản & Xác thực</span>
-        </a>
-        <a href="positions.html" class="menu-item">
-          <span>🎯</span>
-          <span>Vị trí & Cấp độ</span>
-        </a>
-        <a href="interview.html" class="menu-item">
-          <span>💬</span>
-          <span>Phòng phỏng vấn</span>
-        </a>
-        <a href="#" class="menu-item">
-          <span>📊</span>
-          <span>Lịch sử & Kết quả</span>
-        </a>
+      <nav class="nav-menu">
+        <a href="#about" class="nav-link">Giới thiệu</a>
+        <a href="#workflow" class="nav-link">Quy trình</a>
+        <a href="#features" class="nav-link">Tính năng</a>
+        <a href="#rubric" class="nav-link">Chuẩn Rubric</a>
+        <a href="#tech" class="nav-link">Công nghệ</a>
       </nav>
 
-      <div class="sidebar-footer">
-        <div class="user-info">
-          <span class="user-status-dot"></span>
-          <span>Chưa đăng nhập</span>
-        </div>
+      <div class="nav-actions" id="nav-actions">
+        <a href="auth.html" class="btn-nav-secondary" id="btn-nav-login">Đăng nhập</a>
+        <a href="auth.html" class="btn-nav-primary" id="btn-nav-start">Bắt đầu ngay</a>
       </div>
-    </aside>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      
-      <header class="topbar">
-        <div class="topbar-title">
-          <h1 id="page-header-title">Xác thực hệ thống</h1>
-          <p id="page-header-sub">Hệ thống phỏng vấn thử chuyên môn cùng Trí tuệ nhân tạo</p>
-        </div>
-      </header>
+  <main>
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero-section" id="hero">
+      <div class="hero-container">
+        
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="pill-dot"></span>
+            <span>Tích hợp Google Gemini AI thế hệ mới</span>
+          </div>
 
-      <main class="page-body">
-        <div class="auth-wrapper">
-          <div class="auth-card">
-            
-            <div class="auth-card-header">
-              <h2 id="auth-heading">Chào mừng bạn quay trở lại</h2>
-              <p id="auth-subheading">Vui lòng đăng nhập để bắt đầu phiên phỏng vấn</p>
+          <h1 class="hero-title">
+            Luyện Phỏng Vấn Chuyên Nghiệp,<br>
+            <span class="gradient-text">Tự Tin Chinh Phục Mọi Offer</span>
+          </h1>
+
+          <p class="hero-description">
+            Hệ thống giả lập phỏng vấn kỹ thuật 1:1 tự động sinh câu hỏi thực tế theo vị trí và cấp độ. 
+            Nhận điểm số và nhận xét chi tiết đa tiêu chí (Rubric) ngay tức thì sau mỗi câu trả lời.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="auth.html" class="btn-hero-primary" id="btn-hero-start">
+              <span>🚀 Bắt đầu buổi phỏng vấn</span>
+            </a>
+            <a href="#workflow" class="btn-hero-secondary">
+              <span>📖 Xem quy trình 3 bước</span>
+            </a>
+          </div>
+
+          <!-- Highlight metrics -->
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">5</span>
+              <span class="stat-label">Câu hỏi thực tế / Phiên</span>
             </div>
-
-            <!-- Tab Switch -->
-            <div class="auth-tab-group">
-              <button type="button" class="tab-btn active" id="tab-login-btn" onclick="switchAuthMode('login')">
-                Đăng nhập
-              </button>
-              <button type="button" class="tab-btn" id="tab-register-btn" onclick="switchAuthMode('register')">
-                Đăng ký tài khoản
-              </button>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">4</span>
+              <span class="stat-label">Tiêu chí Rubric chi tiết</span>
             </div>
-
-            <div id="auth-alert" class="alert-box" style="display: none;"></div>
-
-            <!-- Form Đăng nhập -->
-            <form id="form-login" onsubmit="handleLogin(event)" novalidate>
-              <div class="form-group">
-                <label for="login-email">Địa chỉ Email <span class="required">*</span></label>
-                <input type="email" id="login-email" class="form-control" placeholder="vidu@domain.com">
-                <small class="error-text" id="err-login-email"></small>
-              </div>
-
-              <div class="form-group">
-                <label for="login-password">Mật khẩu <span class="required">*</span></label>
-                <input type="password" id="login-password" class="form-control" placeholder="Nhập mật khẩu">
-                <small class="error-text" id="err-login-password"></small>
-              </div>
-
-              <button type="submit" class="btn-primary" id="btn-submit-login">Đăng nhập</button>
-            </form>
-
-            <!-- Form Đăng ký -->
-            <form id="form-register" onsubmit="handleRegister(event)" style="display: none;" novalidate>
-              <div class="form-group">
-                <label for="reg-fullname">Họ và tên <span class="required">*</span></label>
-                <input type="text" id="reg-fullname" class="form-control" placeholder="Nguyễn Văn A">
-                <small class="error-text" id="err-reg-fullname"></small>
-              </div>
-
-              <div class="form-group">
-                <label for="reg-email">Địa chỉ Email <span class="required">*</span></label>
-                <input type="email" id="reg-email" class="form-control" placeholder="vidu@domain.com">
-                <small class="error-text" id="err-reg-email"></small>
-              </div>
-
-              <div class="form-group">
-                <label for="reg-password">Mật khẩu <span class="required">*</span></label>
-                <input type="password" id="reg-password" class="form-control" placeholder="Tối thiểu 6 ký tự">
-                <small class="error-text" id="err-reg-password"></small>
-              </div>
-
-              <div class="form-group">
-                <label for="reg-confirm-password">Xác nhận mật khẩu <span class="required">*</span></label>
-                <input type="password" id="reg-confirm-password" class="form-control" placeholder="Nhập lại mật khẩu">
-                <small class="error-text" id="err-reg-confirm"></small>
-              </div>
-
-              <button type="submit" class="btn-primary" id="btn-submit-register">Tạo tài khoản</button>
-            </form>
-
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Phản hồi AI tức thì</span>
+            </div>
           </div>
         </div>
-      </main>
-    </div>
-  </div>
 
-  <script src="js/auth.js"></script>
+        <!-- Hero Preview Mockup -->
+        <div class="hero-visual">
+          <div class="preview-card">
+            <div class="preview-header">
+              <div class="preview-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <div class="preview-title">Phiên phỏng vấn: Backend Developer (Mid-level)</div>
+              <span class="preview-badge">Live Evaluation</span>
+            </div>
+
+            <div class="preview-body">
+              <div class="preview-question">
+                <div class="question-tag">Câu hỏi 1 / 5 • Gemini AI</div>
+                <p>Hãy giải thích cơ chế Indexing trong MySQL (B-Tree Index) và khi nào việc đánh chỉ mục có thể gây phản tác dụng?</p>
+              </div>
+
+              <div class="preview-answer">
+                <div class="answer-tag">Câu trả lời của bạn</div>
+                <p>B-Tree Index giúp tìm kiếm theo độ phức tạp O(log N). Đánh quá nhiều chỉ mục sẽ làm chậm các thao tác ghi (INSERT/UPDATE/DELETE) do phải tái cấu trúc cây...</p>
+              </div>
+
+              <div class="preview-feedback">
+                <div class="feedback-header">
+                  <div class="feedback-title">
+                    <span class="ai-icon">✨</span>
+                    <strong>Đánh giá từ Gemini AI</strong>
+                  </div>
+                  <div class="score-badge">8.5 / 10</div>
+                </div>
+                <p class="feedback-text">
+                  Câu trả lời giải thích chính xác nguyên lý hoạt động của B-Tree và phân tích rõ tác động của việc đánh index dư thừa lên hiệu năng ghi dữ liệu. Đề xuất: nên nêu thêm ví dụ về Composite Index.
+                </p>
+                <div class="feedback-tags">
+                  <span class="ftag">Độ chính xác: 9/10</span>
+                  <span class="ftag">Đầy đủ: 8/10</span>
+                  <span class="ftag">Mạch lạc: 9/10</span>
+                  <span class="ftag">Lập luận: 8/10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= ABOUT / PAIN POINTS ================= -->
+    <section class="section-container" id="about">
+      <div class="section-header">
+        <span class="section-pill">Vì sao bạn cần AI Mock Interview?</span>
+        <h2 class="section-title">Khắc phục rào cản lớn nhất khi đi xin việc</h2>
+        <p class="section-sub">Nhiều ứng viên giỏi kỹ thuật nhưng lại trượt phỏng vấn chỉ vì thiếu cơ hội rèn luyện cách diễn đạt và chưa biết điểm yếu của mình ở đâu.</p>
+      </div>
+
+      <div class="problem-solution-grid">
+        <div class="grid-card problem-card">
+          <div class="card-icon">❌</div>
+          <h3>Khó khăn thường gặp</h3>
+          <ul class="check-list-danger">
+            <li><strong>Không ai sửa sai:</strong> Phỏng vấn thất bại nhưng nhà tuyển dụng chỉ gửi thư từ chối chung chung, không nói rõ lý do.</li>
+            <li><strong>Chi phí quá cao:</strong> Đặt lịch phỏng vấn thử 1:1 với chuyên gia có mức phí lên đến hàng triệu đồng/buổi.</li>
+            <li><strong>Tâm lý căng thẳng:</strong> Ngại ngùng, lo sợ nói sai khi phải đối diện trực tiếp với người phỏng vấn thật.</li>
+          </ul>
+        </div>
+
+        <div class="grid-card solution-card">
+          <div class="card-icon">✅</div>
+          <h3>Giải pháp từ AI Mock Interview</h3>
+          <ul class="check-list-success">
+            <li><strong>Phản hồi chi tiết 24/7:</strong> Gemini AI phân tích cặn kẽ từng câu trả lời theo rubric chuẩn, chỉ rõ điểm cần cải thiện ngay lập tức.</li>
+            <li><strong>Hoàn toàn chủ động:</strong> Luyện tập bất kỳ lúc nào, không giới hạn số phiên phỏng vấn với các vị trí công việc đa dạng.</li>
+            <li><strong>Môi trường an toàn:</strong> Không áp lực phán xét, thoải mái thử nghiệm nhiều cách diễn đạt để nâng cao sự tự tin.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WORKFLOW SECTION ================= -->
+    <section class="section-container bg-subtle" id="workflow">
+      <div class="section-header">
+        <span class="section-pill">Quy trình trải nghiệm</span>
+        <h2 class="section-title">3 bước đơn giản để rèn luyện</h2>
+        <p class="section-sub">Thiết kế tinh gọn, trực quan giúp bạn tập trung 100% vào việc trả lời câu hỏi và tiếp thu nhận xét.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-badge">Bước 1</div>
+          <div class="step-icon">🎯</div>
+          <h3>Chọn Vị trí & Cấp độ</h3>
+          <p>Lựa chọn định hướng bạn muốn thử sức như <strong>Frontend, Backend, Fullstack, AI Engineer...</strong> với các cấp độ từ <strong>Intern, Fresher, Junior đến Senior</strong>.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">Bước 2</div>
+          <div class="step-icon">💬</div>
+          <h3>Phỏng vấn cùng AI</h3>
+          <p>Hệ thống tự động sinh <strong>5 câu hỏi kỹ thuật chuyên sâu</strong> sát thực tế. Bạn nhập câu trả lời tương tác và gửi lên hệ thống.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">Bước 3</div>
+          <div class="step-icon">📊</div>
+          <h3>Nhận Điểm & Nhận xét</h3>
+          <p>Gemini AI chấm điểm (thang 0-10) và đưa ra nhận xét theo 4 tiêu chí rubric. Xem lại toàn bộ kết quả và lưu trữ lịch sử để theo dõi sự tiến bộ.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES SECTION ================= -->
+    <section class="section-container" id="features">
+      <div class="section-header">
+        <span class="section-pill">Tính năng nổi bật</span>
+        <h2 class="section-title">Được thiết kế cho kết quả thực tế</h2>
+        <p class="section-sub">Kết hợp sức mạnh của Generative AI và tiêu chuẩn đánh giá nhân sự quốc tế.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>Sinh câu hỏi thông minh</h3>
+          <p>Bộ câu hỏi không bị cố định rập khuôn mà được Gemini AI kiến tạo linh hoạt, bảo đảm độ phân hóa đúng với cấp độ kỹ năng đã chọn.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3>Đánh giá đa chiều (Rubric)</h3>
+          <p>Không chỉ đúng/sai, hệ thống phân tích chiều sâu tư duy, độ mạch lạc trong diễn đạt và khả năng liên hệ thực tế của ứng viên.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Tốc độ phản hồi cực nhanh</h3>
+          <p>Tối ưu với mô hình Gemini Flash thế hệ mới, cho phép nhận điểm số và gợi ý chỉnh sửa chỉ sau vài giây xử lý.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📂</div>
+          <h3>Quản lý lịch sử phỏng vấn</h3>
+          <p>Xem lại tất cả các phiên phỏng vấn đã hoàn thành, đọc lại câu trả lời cũ và lời khuyên của AI để liên tục hoàn thiện.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Cơ chế dự phòng thông minh</h3>
+          <p>Hệ thống Backend tự động chuyển đổi mô hình (Fallback Gemini) và kiểm tra lỗi kết nối để phiên phỏng vấn không bị gián đoạn.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <h3>Bảo mật tài khoản JWT</h3>
+          <p>Mỗi ứng viên có không gian dữ liệu riêng biệt, bảo vệ thông tin cá nhân và lịch sử rèn luyện qua mã hóa chuẩn JWT.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RUBRIC SECTION ================= -->
+    <section class="section-container bg-subtle" id="rubric">
+      <div class="section-header">
+        <span class="section-pill">Tiêu chuẩn chấm điểm</span>
+        <h2 class="section-title">Bộ tiêu chí Rubric đánh giá từ AI</h2>
+        <p class="section-sub">Mỗi câu trả lời của ứng viên được Gemini AI soi chiếu qua 4 tiêu chuẩn khắt khe để đảm bảo tính khách quan và chiều sâu.</p>
+      </div>
+
+      <div class="rubric-grid">
+        <div class="rubric-card">
+          <div class="rubric-header">
+            <span class="rubric-num">01</span>
+            <h3>Độ chính xác (Accuracy)</h3>
+          </div>
+          <p>Kiểm tra tính đúng đắn của các khái niệm kỹ thuật, thuật toán, công nghệ và nguyên lý cốt lõi được đề cập trong câu trả lời.</p>
+        </div>
+
+        <div class="rubric-card">
+          <div class="rubric-header">
+            <span class="rubric-num">02</span>
+            <h3>Độ đầy đủ (Completeness)</h3>
+          </div>
+          <p>Đánh giá mức độ bao quát các khía cạnh của câu hỏi, không bỏ sót các ý trọng tâm hay các trường hợp biên (edge cases).</p>
+        </div>
+
+        <div class="rubric-card">
+          <div class="rubric-header">
+            <span class="rubric-num">03</span>
+            <h3>Mạch lạc & Cấu trúc (Clarity)</h3>
+          </div>
+          <p>Khả năng tổ chức ý tưởng logic, trình bày rành mạch, ngắn gọn, sử dụng đúng thuật ngữ chuyên ngành công nghệ thông tin.</p>
+        </div>
+
+        <div class="rubric-card">
+          <div class="rubric-header">
+            <span class="rubric-num">04</span>
+            <h3>Lập luận & Thực tiễn (Reasoning)</h3>
+          </div>
+          <p>Biết đưa ra ví dụ thực tế minh họa, phân tích ưu nhược điểm (trade-offs) và giải thích lý do tại sao chọn giải pháp đó.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TECH STACK SECTION ================= -->
+    <section class="section-container" id="tech">
+      <div class="section-header">
+        <span class="section-pill">Kiến trúc hệ thống</span>
+        <h2 class="section-title">Công nghệ xây dựng dự án</h2>
+        <p class="section-sub">Kiến trúc tách biệt Frontend & Backend hiện đại, đảm bảo hiệu năng cao và dễ dàng mở rộng.</p>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-icon">🐍</div>
+          <h4>FastAPI (Python)</h4>
+          <p>Backend RESTful API tốc độ cao, xử lý bất đồng bộ (Async), tự động sinh tài liệu Swagger UI.</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">🤖</div>
+          <h4>Google Gemini AI</h4>
+          <p>Mô hình ngôn ngữ lớn (Gemini 3.5 Flash-lite & 3.8 Flash) phụ trách sinh câu hỏi và chấm điểm rubric.</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">🐬</div>
+          <h4>MySQL Database</h4>
+          <p>Lưu trữ an toàn dữ liệu người dùng, danh mục vị trí, phiên phỏng vấn và lịch sử câu trả lời.</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon">🎨</div>
+          <h4>Modern Web UI</h4>
+          <p>HTML5, Modern CSS và Vanilla JavaScript thuần túy, tải trang tức thì mà không cần cài đặt phức tạp.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA BANNER ================= -->
+    <section class="cta-banner-section">
+      <div class="cta-banner-container">
+        <h2>Sẵn Sàng Bứt Phá Kỹ Năng Phỏng Vấn Của Bạn?</h2>
+        <p>Tạo tài khoản miễn phí ngay hôm nay và trải nghiệm phiên phỏng vấn thử đầu tiên cùng Gemini AI.</p>
+        <div class="cta-actions">
+          <a href="auth.html" class="btn-cta-large" id="btn-cta-bottom">
+            <span>🚀 Bắt đầu luyện tập ngay</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">
+          <div class="brand-badge small">AI</div>
+          <span class="brand-title">MockInterview</span>
+        </div>
+        <p class="footer-desc">Nền tảng phỏng vấn thử chuyên môn ứng dụng Trí tuệ nhân tạo (Google Gemini AI).</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-group">
+          <h5>Điều hướng</h5>
+          <a href="#about">Giới thiệu</a>
+          <a href="#workflow">Quy trình</a>
+          <a href="#features">Tính năng</a>
+          <a href="#rubric">Tiêu chuẩn Rubric</a>
+        </div>
+        <div class="footer-group">
+          <h5>Hệ thống</h5>
+          <a href="auth.html">Đăng nhập</a>
+          <a href="auth.html">Đăng ký tài khoản</a>
+          <a href="positions.html">Chọn vị trí</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 AI Mock Interview System. Phát triển phục vụ học tập & nghiên cứu ứng dụng AI.</p>
+      <a href="#hero" class="back-to-top">↑ Lên đầu trang</a>
+    </div>
+  </footer>
+
+  <!-- Check Login Status Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("access_token");
+      const userName = localStorage.getItem("user_name");
+
+      if (token) {
+        // Đã đăng nhập -> Cập nhật nút CTA thành "Vào phỏng vấn"
+        const navLogin = document.getElementById("btn-nav-login");
+        const navStart = document.getElementById("btn-nav-start");
+        const heroStart = document.getElementById("btn-hero-start");
+        const ctaBottom = document.getElementById("btn-cta-bottom");
+
+        if (navLogin) {
+          navLogin.innerText = userName ? `Chào, ${userName}` : "Vị trí & Cấp độ";
+          navLogin.href = "positions.html";
+        }
+        if (navStart) {
+          navStart.innerText = "Vào phỏng vấn →";
+          navStart.href = "positions.html";
+        }
+        if (heroStart) {
+          heroStart.innerHTML = "<span>🎯 Vào phòng phỏng vấn ngay</span>";
+          heroStart.href = "positions.html";
+        }
+        if (ctaBottom) {
+          ctaBottom.innerHTML = "<span>🎯 Tiếp tục phiên luyện tập</span>";
+          ctaBottom.href = "positions.html";
+        }
+      }
+    });
+  </script>
 </body>
 </html>
