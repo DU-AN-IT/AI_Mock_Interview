@@ -1,85 +1,91 @@
-# AI Mock Interview - Backend + Frontend
+# 🚀 AI Mock Interview - Backend Service
 
-Dự án gồm FastAPI, MySQL, HTML/CSS/JavaScript và Gemini API. Phiên bản này hỗ trợ đăng ký/đăng nhập, tạo phiên phỏng vấn, Gemini sinh đúng 5 câu hỏi, đánh giá từng câu trả lời theo rubric, lưu điểm/nhận xét và đánh dấu phiên đã hoàn thành.
+Hệ thống Backend xây dựng trên nền tảng **FastAPI (Python)** kết hợp **MySQL** và **Google Gemini API**, cung cấp toàn bộ RESTful API cho hệ thống luyện tập và đánh giá phỏng vấn tự động.
 
-## 1. Chuẩn bị MySQL (XAMPP)
+---
 
-Bật MySQL trong XAMPP. Dự án đang cấu hình cổng `3306`, tài khoản `root`, mật khẩu trống theo thiết lập hiện tại của bạn. Trong phpMyAdmin, mở tab SQL và chạy:
+## 🛠️ 1. Công nghệ sử dụng
+
+- **FastAPI:** Framework web hiệu năng cao, hỗ trợ Async/Await, tự động sinh Swagger UI.
+- **SQLAlchemy ORM:** Quản lý cơ sở dữ liệu quan hệ, tự động đồng bộ hóa bảng.
+- **Pydantic v2:** Kiểm tra (validate) kiểu dữ liệu đầu vào và định hình phản hồi (schemas).
+- **PyMySQL:** Driver kết nối MySQL.
+- **Passlib & PyJWT:** Băm mật khẩu an toàn với Bcrypt và mã hóa Access Token theo chuẩn JWT.
+- **Google Gemini API (httpx):** Tích hợp đa mô hình AI (`gemini-3.5-flash-lite`, `gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-2.5-flash`) để sinh câu hỏi và chấm điểm rubric tự động.
+
+---
+
+## 📦 2. Cài đặt và Khởi chạy
+
+### Bước 1: Chuẩn bị MySQL
+Khởi động MySQL trong XAMPP (hoặc MySQL Server độc lập). Tạo cơ sở dữ liệu:
 
 ```sql
-CREATE DATABASE IF NOT EXISTS ai_mock_interview_gemini
+CREATE DATABASE IF NOT EXISTS ai_mock_interview
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Nếu MySQL của bạn dùng cổng hoặc mật khẩu khác, hãy sửa `DATABASE_URL` trong `backend/.env`.
-
-## 2. Cài đặt Backend trên Windows
-
-Mở PowerShell tại thư mục dự án:
+### Bước 2: Thiết lập môi trường ảo
+Mở terminal tại thư mục `backend`:
 
 ```powershell
-cd F:\AI_MOCK_INTERVIEW\backend
-py -m venv .venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-Copy-Item .env.example .env
 ```
 
-Mở `backend/.env`, kiểm tra các dòng sau và thay Gemini API key bằng key của bạn (không chia sẻ key):
+*(Hoặc nhấp đúp vào `setup_backend.bat` để cài đặt tự động).*
+
+### Bước 3: Cấu hình file `.env`
+Tạo file `.env` từ `.env.example`:
 
 ```env
-DATABASE_URL=mysql+pymysql://root:@127.0.0.1:3306/ai_mock_interview_gemini?charset=utf8mb4
-SECRET_KEY=thay_bang_chuoi_bi_mat_dai_va_ngau_nhien
+DATABASE_URL=mysql+pymysql://root:123456@127.0.0.1:3306/ai_mock_interview?charset=utf8mb4
+SECRET_KEY=ptit-ai-mock-interview-secret-key-2026-super-secure
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
-GEMINI_API_KEY=API_KEY_GEMINI_CUA_BAN
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
 GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Gemini ưu tiên model `gemini-3.5-flash-lite`; nếu model này lỗi, hệ thống thử tiếp `gemini-3.8-flash`.
-
-Chạy Backend (vẫn ở thư mục `backend`):
-
+### Bước 4: Chạy máy chủ phát triển
 ```powershell
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Mở `http://127.0.0.1:8000/docs` để xem API. Kiểm tra `http://127.0.0.1:8000/health` và `http://127.0.0.1:8000/health/db`.
+*(Hoặc nhấp đúp vào `run_backend.bat`).*
 
-## 3. Chạy Frontend
+- **API Documentation (Swagger UI):** `http://127.0.0.1:8000/docs`
+- **ReDoc:** `http://127.0.0.1:8000/redoc`
+- **Health Check:** `http://127.0.0.1:8000/health` và `http://127.0.0.1:8000/health/db`
 
-Mở thư mục `frontend` bằng VS Code, dùng Live Server mở `index.html`. Nếu Live Server dùng cổng khác `5500` hoặc `5501`, thêm origin đó vào `allow_origins` trong `backend/app/main.py`. Backend API mặc định ở `http://127.0.0.1:8000`.
+---
 
-## 4. Luồng sử dụng
+## 📑 3. Danh mục API Endpoints
 
-1. Đăng ký tài khoản tại `index.html`.
-2. Đăng nhập để nhận JWT.
-3. Chọn vị trí (Frontend/Backend/Tester/BA) và cấp độ (Intern/Fresher/Junior).
-4. Mở phòng phỏng vấn. Backend tạo phiên và gọi Gemini tạo 5 câu hỏi.
-5. Mỗi lần bấm câu tiếp theo, câu trả lời được gửi đến Backend và lưu trong MySQL. Có thể quay lại câu trước và cập nhật câu trả lời.
-6. Khi kết thúc, Backend cập nhật trạng thái phiên thành `COMPLETED`.
+### 🔐 Authentication (`/api/auth`)
+* `POST /api/auth/register`: Đăng ký tài khoản ứng viên mới.
+* `POST /api/auth/login`: Xác thực thông tin đăng nhập và trả về Bearer JWT Token.
 
-## 5. Các bảng tự động tạo
+### 🎯 Interview Sessions (`/api/interviews`)
+* `POST /api/interviews`: Tạo phiên phỏng vấn mới theo `position_id` và `level_id`.
+* `POST /api/interviews/{session_id}/questions/generate`: Gemini AI sinh bộ 5 câu hỏi phỏng vấn theo vị trí và cấp độ.
+* `GET /api/interviews/{session_id}`: Lấy thông tin phiên, danh sách câu hỏi và trạng thái hoàn thành.
+* `POST /api/interviews/{session_id}/answers`: Ứng viên nộp câu trả lời; Gemini AI phân tích và chấm điểm theo 4 tiêu chí rubric.
 
-Khi Backend khởi động và kết nối được MySQL, SQLAlchemy tạo các bảng `users`, `job_positions`, `interview_levels`, `interview_sessions`, `interview_questions`, `interview_answers`. Dữ liệu vị trí và cấp độ mẫu được thêm nếu bảng tương ứng đang trống.
+### 📊 Results & History (`/api/interviews`)
+* `GET /api/interviews/{session_id}/result`: Lấy tổng kết kết quả phiên (điểm trung bình, radar chart metrics, điểm mạnh, điểm cần cải thiện, câu trả lời mẫu).
+* `GET /api/interviews/history`: Lấy danh sách lịch sử tất cả các phiên phỏng vấn của ứng viên.
 
-Nếu đã có bảng `interview_answers` từ phiên bản trước, chạy lệnh sau một lần để bổ sung cột điểm và nhận xét:
+---
 
-```sql
-ALTER TABLE interview_answers
-ADD COLUMN score FLOAT NULL,
-ADD COLUMN feedback TEXT NULL;
-```
+## 🛡️ 4. Cơ chế Xử lý Lỗi & Dự phòng AI
 
-## 6. API chính
-
-- `POST /api/auth/register` - đăng ký.
-- `POST /api/auth/login` - đăng nhập.
-- `POST /api/interviews` - tạo phiên phỏng vấn (cần Bearer token).
-- `POST /api/interviews/{session_id}/questions/generate` - Gemini tạo/lấy 5 câu hỏi (cần Bearer token).
-- `POST /api/interviews/{session_id}/answers` - gửi câu trả lời và rubric đến Gemini, lưu câu trả lời cùng điểm (0-10)/nhận xét (cần Bearer token). Nếu Gemini lỗi, API trả `503` và không lưu câu trả lời.
-- `GET /api/interviews/{session_id}` - lấy câu hỏi, câu trả lời, điểm và nhận xét từng câu (cần Bearer token).
-- `POST /api/interviews/{session_id}/complete` - kết thúc phiên (cần Bearer token).
-
-Không đưa file `.env`, mật khẩu hoặc API key lên GitHub.
+1. **Cơ chế Fallback Mô hình Gemini:**
+   - Hệ thống tự động xoay vòng các mô hình: `gemini-3.5-flash-lite` ➔ `gemini-3.8-flash` ➔ `gemini-3.5-flash` ➔ `gemini-2.5-flash`.
+   - Nếu gặp lỗi 503 (quá tải máy chủ AI) hoặc giới hạn quota, hệ thống sẽ tự động thử lại mô hình tiếp theo mà không làm gián đoạn trải nghiệm người dùng.
+2. **Ngăn chặn ghi đè câu trả lời:**
+   - Nếu ứng viên nộp lại câu trả lời cho câu hỏi đã được đánh giá, API trả về HTTP `409 Conflict` để bảo toàn điểm số và feedback trước đó.
+3. **Bộ câu hỏi dự phòng cục bộ:**
+   - Trường hợp mất kết nối mạng hoặc chưa cấu hình API key, hệ thống kích hoạt bộ câu hỏi dự phòng chuyên môn được tích hợp sẵn.

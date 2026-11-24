@@ -213,7 +213,7 @@ async function initInterviewSession() {
   if (!getAccessToken()) {
     showBanner("error", "Bạn chưa đăng nhập. Vui lòng đăng nhập trước khi bắt đầu phỏng vấn.");
     setTimeout(() => {
-      window.location.href = "index.html";
+      window.location.href = "auth.html";
     }, 1200);
     return;
   }
@@ -276,7 +276,7 @@ async function initInterviewSession() {
       localStorage.removeItem("access_token");
       localStorage.removeItem("current_session_id");
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.href = "auth.html";
       }, 1200);
       return;
     }
@@ -345,7 +345,7 @@ async function handleSubmitAnswer() {
       showBanner("error", "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       localStorage.removeItem("access_token");
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.href = "auth.html";
       }, 1200);
       return;
     }
